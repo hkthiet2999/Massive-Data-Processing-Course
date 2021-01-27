@@ -1,22 +1,27 @@
-# Massive-Data-Processing-Techniques-in-Data-Science-Course
+# Xử Lý Dữ Liệu Lớn
+## Giới thiệu
+  Bài viết này được tạo ra với mục đích ghi lại toàn bộ quá trình học tập, nghiên cứu về Xử Lý Dữ Liệu Lớn của mình, qua đó tổng hợp lại các kiến thức từ tổng quan đến chi tiết những gì mình học tập, nghiên cứu và thực hành được. Trong mỗi phần mình trình bày về lý thuyết sẽ có các phần code demo, phần demo sẽ được code bằng ngôn ngữ Python3, lưu file với đuôi là .ipynb. 
 
-# Trình bày tổng quan về Apache Spark và Mapreduce
 ## Mục lục
-- [I. Tổng quan về Apache Spark](#I.-tong-quan-ve-apache-spark)
-  - [ 1. Giới thiệu](#1.-gioi-thieu)
-  - [ 2. Các thành phần của Apache Spark](#2.-cac-thanh-phan-cua-apache-spark)
-  - [ 3. Những tính năng nổi bật](#3.-nhung-tinh-nang-noi-bat)
-  - [ 4. Quản lý bộ nhớ của Apache Spark](#4.-quan-ly-bo-nho-cua-apache-spark)
-- [II. Tổng quan về Mapreduce](#II.-tong-quan-ve-mapreduce)
-  - [ 1. Hadoop và Mapreduce](#1.-hadoop-mapreduce)
-  - [ 2. Mapreduce và các thủ tục chính](#2.-mapreduce-va-cac-thu-tuc-chinh)
-  - [ 3. Hàm Map và Reduce](#3.-ham-map-va-mapreduce)
-  - [ 4. Nguyên tắc hoạt động ](#4.-nguyen-tac-hoat-dong)
-  - [ 5. Các bước hoạt động của MapReduce](#5.-cac-buoc-hoat-dong)
-  - [ 6. Luồng dữ liệu nền tảng của Mapreduce](#6.-luong-du-lieu)
-  - [ 7. Ứng dụng của Mapreduce](#7.-ung-dung)
-- [Ví dụ minh họa](#vd)
+- [A.Trình bày tổng quan về Apache Spark và Mapreduce](#chA)
+  - [I. Tổng quan về Apache Spark](#I.-tong-quan-ve-apache-spark)
+    - [ 1. Giới thiệu](#1.-gioi-thieu)
+    - [ 2. Các thành phần của Apache Spark](#2.-cac-thanh-phan-cua-apache-spark)
+    - [ 3. Những tính năng nổi bật](#3.-nhung-tinh-nang-noi-bat)
+    - [ 4. Quản lý bộ nhớ của Apache Spark](#4.-quan-ly-bo-nho-cua-apache-spark)
+  - [II. Tổng quan về Mapreduce](#II.-tong-quan-ve-mapreduce)
+    - [ 1. Hadoop và Mapreduce](#1.-hadoop-mapreduce)
+    - [ 2. Mapreduce và các thủ tục chính](#2.-mapreduce-va-cac-thu-tuc-chinh)
+    - [ 3. Hàm Map và Reduce](#3.-ham-map-va-mapreduce)
+    - [ 4. Nguyên tắc hoạt động ](#4.-nguyen-tac-hoat-dong)
+    - [ 5. Các bước hoạt động của MapReduce](#5.-cac-buoc-hoat-dong)
+    - [ 6. Luồng dữ liệu nền tảng của Mapreduce](#6.-luong-du-lieu)
+    - [ 7. Ứng dụng của Mapreduce](#7.-ung-dung)
+  - [III. Ví dụ minh họa](#vd)
+
 - [Tham khảo](#refer)
+<a name="chA"></a>
+# A.Trình bày tổng quan về Apache Spark và Mapreduce
 <a name="I.-tong-quan-ve-apache-spark"></a>
 ## I. Tổng quan về Apache Spark
 <a name="1.-gioi-thieu"></a>
@@ -139,6 +144,8 @@ File homework01.ipynb trong repo này là file minh họa cho bài toán WordCou
 
 <a name="refer"></a>
 ### Tham khảo
+Chương A:
+
 https://viblo.asia/p/tong-quan-ve-apache-spark-cho-he-thong-big-data-RQqKLxR6K7z
 
 https://viblo.asia/p/tim-hieu-ve-hadoop-bJzKmOBXl9N
