@@ -126,8 +126,9 @@ MapReduce được ứng dụng cho việc thống kê hàng loạt những số
 - Thống kê được tất cả từ khóa có trên website, hostname,…
 <a name="vd"></a>
 ## Ví dụ minh họa
- 
-WordCount là bài toán đếm tần suất xuất hiện của các từ trong đoạn văn bản. Quá trình xử lý bài toán này bằng Map-Redue như sau:
+Trong phần ví dụ minh họa này, mình đã tạo một Project (homework01) trên Google Colab dùng thư viện Spark đọc vào một file văn bản (input.txt) và đếm số từ trên file văn bản, sau đó lọc ra k từ có tần suất xuất hiện nhiều nhất. Đây là đường link đến project của mình : [homework01](https://colab.research.google.com/drive/1ooNYc_wXl-0V3JwhQ8F62oXW6ab-986v#scrollTo=Ny0esGJZpT4o)
+
+Quá trình xử lý bài toán này bằng Map-Redue sử dụng thư viện Spark như sau:
 
 ![](apache_spark_and_mapreduce/wc.jpg)
 
@@ -144,7 +145,22 @@ Hàm Reduce cũng được chạy song song để xử lý các tập từ khoá
 
 Giữa hàm Map và Reduce có một giai đoạn xử lý trung gian gọi là hàm Shuffle. Hàm này có nhiệm vụ sắp xếp các từ và tổng hợp dữ liệu đầu vào cho Reduce từ các kết quả đầu ra của hàm Map.
 
-File homework01.ipynb trong repo này là file minh họa cho bài toán WordCount trên, sử dụng file input.txt làm file văn bản và đếm số lượng các từ trong file đó. Output của chương trình là 20 từ đầu tiên có số lượng cao nhất, sắp xếp theo thứ tự từ trên xuống như sau: 
+Để hiện thực bài toán, bước đầu tiên cần phải import các thư viện cần thiết và khởi tạo project của spark như sau:
+
+![](apache_spark_and_mapreduce/contructor.png)
+
+Bước tiếp theo trong project này, mình tiến hành đọc file input và đồng thời split các khoảng trắng bị thừa. Sau đó mình xử lý bớt các ký tự đặc biệt và chuyển các ký tự in hoa thành in thường. Ví dụ như có trường hợp chữ 'KIENTHIET' và 'kienthiet' có trong file text, sau khi xử lý qua hàm lower_clean_str bên dưới, cả hai ký tự trên đều sẽ được tính là 1 ký tự.
+
+![](apache_spark_and_mapreduce/read_clean_input.png)
+
+Đoạn code trên mình cũng thực hiện qua bước 'Map' như đã trình bày ở phần lý thuyết, chỉ cần gọi hàm map() có trong spark và truyền vào content của file text mình đã clean như trên.
+
+Sau khi thực hiện bước map, mình thực hiện tiếp bước reduce. Ở đây mình sử dụng hàm reduce() để tính tổng các ký tự đã map. Hàm reduce này ngoài chức năng tính tổng ký tự còn có thể tìm max, min các ký tự trong map. Còn hàm reduceByKey() dùng để đếm tần số xuất hiện các từ có trong map.
+
+![](apache_spark_and_mapreduce/reduce.png)
+
+Kết quả dưới đây thể hiện tần suất xuất hiện của 20 ký tự đầu tiên có trong file input.txt:
+
 
 ![](apache_spark_and_mapreduce/output.png)
 
