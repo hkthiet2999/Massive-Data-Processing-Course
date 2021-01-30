@@ -1,0 +1,6 @@
+25ms (milliseconds)	| 1b (bytes)
+5s (seconds)		| 1k or 1kb (kibibytes = 1024 bytes)
+10m or 10min (minutes)	| 1m or 1mb (mebibytes = 1024 kibibytes)
+3h (hours)		| 1g or 1gb (gibibytes = 1024 mebibytes)
+5d (days)		| 1t or 1tb (tebibytes = 1024 gibibytes)
+1y (years)		| 1p or 1pb (pebibytes = 1024 tebibytes)
