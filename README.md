@@ -303,7 +303,7 @@ Kết quả dưới đây thể hiện tần suất xuất hiện của 20 ký t
 ### 4.Resilient Distributed Datasets (RDDs)
   Như đã đề cập ở phần tổng quan, Spark hoạt động dựa trên khái niệm về tập dữ liệu phân tán có khả năng phục hồi (RDD). Đây là một tập hợp các phần tử có khả năng chịu lỗi và có thể hoạt động song song. Có hai cách để tạo RDD: song song một tập hợp hiện có trong chương trình trình điều khiển của bạn hoặc tham chiếu tập dữ liệu trong hệ thống lưu trữ bên ngoài, chẳng hạn như hệ thống tệp được chia sẻ, HDFS, HBase hoặc bất kỳ nguồn dữ liệu nào cung cấp Hadoop InputFormat.
   
- ## 4.1 Parallelized Collections
+ #### 4.1 Parallelized Collections
  
    Bộ sưu tập song song được tạo bằng cách gọi phương thức song song của SparkContext trên một bộ sưu tập hoặc bộ sưu tập có thể lặp lại hiện có trong chương trình trình điều khiển của bạn. Các phần tử của bộ sưu tập được sao chép để tạo thành một tập dữ liệu phân tán có thể hoạt động song song. Ví dụ: đây là cách tạo một tập hợp song song chứa các số từ 1 đến 5:
    
@@ -313,7 +313,7 @@ Kết quả dưới đây thể hiện tần suất xuất hiện của 20 ký t
 
   Một tham số quan trọng đối với các tập hợp song song là số lượng phân vùng để cắt tập dữ liệu vào. Spark sẽ chạy một tác vụ cho mỗi phân vùng của cụm. Thông thường, bạn muốn 2-4 phân vùng cho mỗi CPU trong cụm của mình. Thông thường, Spark cố gắng đặt số lượng phân vùng tự động dựa trên cụm của bạn. Tuy nhiên, bạn cũng có thể đặt nó theo cách thủ công bằng cách chuyển nó làm tham số thứ hai để song song hóa (ví dụ: sc.parallelize (data, 10)). Lưu ý: một số nơi trong mã sử dụng thuật ngữ lát (một từ đồng nghĩa với phân vùng) để duy trì khả năng tương thích ngược.
 
- ## 4.2 External Datasets
+ #### 4.2 External Datasets
   PySpark có thể tạo tập dữ liệu phân tán từ bất kỳ nguồn lưu trữ nào được Hadoop hỗ trợ, bao gồm hệ thống tệp cục bộ của bạn, HDFS, Cassandra, HBase, Amazon S3, v.v. Spark hỗ trợ tệp văn bản, SequenceFiles và bất kỳ Hadoop InputFormat nào khác.
 
   Các RDD của tệp văn bản có thể được tạo bằng cách sử dụng phương thức textFile của SparkContext. Phương thức này lấy một URI cho tệp (đường dẫn cục bộ trên máy hoặc URI hdfs: //, s3a: //, v.v.) và đọc nó như một tập hợp các dòng. Đây là một lời gọi ví dụ:
@@ -341,7 +341,7 @@ Kết quả dưới đây thể hiện tần suất xuất hiện của 20 ký t
 
 ![](spark-properties_RDDs_DataFrames/rddHeader.png)
 
-## 4.3 RDD Operations
+#### 4.3 RDD Operations
   RDD hỗ trợ hai loại hoạt động: biến đổi, tạo ra một tập dữ liệu mới từ một tập dữ liệu hiện có và các hành động, trả về một giá trị cho chương trình trình điều khiển sau khi chạy một tính toán trên tập dữ liệu. Ví dụ, bản đồ là một phép biến đổi chuyển từng phần tử tập dữ liệu qua một hàm và trả về một RDD mới đại diện cho kết quả. Mặt khác, Reduce là một hành động tổng hợp tất cả các phần tử của RDD bằng cách sử dụng một số chức năng và trả về kết quả cuối cùng cho chương trình điều khiển (mặc dù cũng có một hàm ReduceByKey song song trả về một tập dữ liệu phân tán).
   
   Tất cả các phép biến đổi trong Spark đều lười biếng, ở chỗ chúng không tính toán ngay kết quả của chúng. Thay vào đó, họ chỉ nhớ các phép biến đổi được áp dụng cho một số tập dữ liệu cơ sở (ví dụ: một tệp). Các phép biến đổi chỉ được tính khi một hành động yêu cầu kết quả được trả về chương trình điều khiển. Thiết kế này giúp Spark chạy hiệu quả hơn. Ví dụ, chúng ta có thể nhận ra rằng một tập dữ liệu được tạo thông qua bản đồ sẽ được sử dụng để giảm và chỉ trả về kết quả của việc giảm tới trình điều khiển, thay vì tập dữ liệu được ánh xạ lớn hơn.
@@ -362,7 +362,7 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
   
   Chúng ta cũng có thể sử dụng counts.sortByKey () để sắp xếp các cặp theo thứ tự bảng chữ cái, và cuối cùng counts.collect () để đưa chúng trở lại chương trình điều khiển dưới dạng danh sách các đối tượng.
   
-## 4.4 RDD Persistence 
+#### 4.4 RDD Persistence 
   
   Một trong những khả năng quan trọng nhất trong Spark là duy trì (hoặc lưu vào bộ nhớ đệm) một tập dữ liệu trong bộ nhớ qua các hoạt động. Khi bạn duy trì một RDD, mỗi nút lưu trữ bất kỳ phân vùng nào của nó mà nó tính toán trong bộ nhớ và sử dụng lại chúng trong các hành động khác trên tập dữ liệu đó (hoặc các tập dữ liệu bắt nguồn từ nó). Điều này cho phép các hành động trong tương lai nhanh hơn nhiều (thường gấp hơn 10 lần). Bộ nhớ đệm là một công cụ chính cho các thuật toán lặp đi lặp lại và sử dụng tương tác nhanh.
 
@@ -405,47 +405,51 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
 <a name="chB_III_4"></a>
 ### 4. Khởi tạo DataFrames
   Có nhiều cách để tạo DataFrames, trong đó có 3 phương pháp dưới đây là phổ biến nhất:
-## 4.1 Khởi tạo DataFrames từ tập tin JSON
+#### 4.1 Khởi tạo DataFrames từ tập tin JSON
   JSON là viết tắt của JavaScript Object Notation, là một loại tệp lưu trữ các đối tượng cấu trúc dữ liệu đơn giản ở định dạng .json. Nó chủ yếu được sử dụng để truyền dữ liệu giữa các máy chủ Web.
   Khi nói đến Spark, các tệp .json đang được tải không phải là tệp .json điển hình. Chúng ta không thể tải tệp JSON bình thường vào DataFrame. Tệp JSON mà chúng ta tải phải ở định dạng được cung cấp bên dưới:
+  
 ![](spark-properties_RDDs_DataFrames/jsonFormat.png)
 
   Các tệp JSON có thể được tải lên DataFrames bằng cách sử dụng hàm read.JSON, với tên tệp mà chúng tôi muốn tải lên. Ví dụ, chúng ta đang tải bảng đếm huy chương Olympic lên DataFrame. Tổng cộng có 10 trường. Hàm printSchema () in ra lược đồ của DataFrame như dưới đây:
+  
 ![](spark-properties_RDDs_DataFrames/df_example.png)
 
-## 4.2 Khởi tạo DataFrames từ RDDs đã tạo sẵn
+#### 4.2 Khởi tạo DataFrames từ RDDs đã tạo sẵn
   DataFrames cũng có thể được tạo từ các RDD hiện có. Đầu tiên, chúng ta tạo một RDD và sau đó tải RDD đó vào một DataFrame bằng cách sử dụng hàm createDataFrame (Name_of_the_rdd_file).
   Trong hình dưới đây, trước tiên chúng ta đang tạo một RDD, chứa các số từ 1 đến 10 và các hình khối của chúng. Sau đó, chúng tôi sẽ tải RDD đó vào DataFrame.
+  
 ![](spark-properties_RDDs_DataFrames/df_byRDD.png)
 
-## 4.3 Khởi tạo DataFrames từ tập tin CSV
+#### 4.3 Khởi tạo DataFrames từ tập tin CSV
   Chúng ta cũng có thể tạo DataFrames bằng cách tải các tệp .csv. Đây là một ví dụ về tải tệp .csv lên DataFrame:
+  
   ![](spark-properties_RDDs_DataFrames/  df_byCSV.png)
 
 <a name="chB_III_5"></a>
 ### 5. Làm việc với DataFrames
 
-## 5.1 Union hai DataFrames
+#### 5.1 Union hai DataFrames
   Để nối hai DataFrames với nhau, ta sử dụng câu lệnh sau:
   ```
   unionDF = df1.union(df2)
 	display(unionDF)
   ```
-## 5.2 Ghi DataFrame hợp nhất vào tệp Parquet
+#### 5.2 Ghi DataFrame hợp nhất vào tệp Parquet
 
   ```
   # Remove the file if it exists
   dbutils.fs.rm("/tmp/databricks-df-example.parquet", True)
   unionDF.write.parquet("/tmp/databricks-df-example.parquet")
   ```
-## 5.3 Đọc DataFrame từ tệp Parquet
+#### 5.3 Đọc DataFrame từ tệp Parquet
 
   ```
   parquetDF = spark.read.parquet("/tmp/databricks-df-example.parquet")
   display(parquetDF)
    ```
 
-## 5.4 Explode cột trong DataFrames
+#### 5.4 Explode cột trong DataFrames
   Ta lấy ví dụ cần giải phóng cột employees như sau:
   ```
   from pyspark.sql.functions import explode
@@ -468,7 +472,7 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
   | xiangrui|    meng|no-reply@stanford...|120000|
   |    matei|    null|no-reply@waterloo...|140000|
 
-## 5.5 Sử dụng filter () để trả về các hàng khớp với một đơn vị từ
+#### 5.5 Sử dụng filter () để trả về các hàng khớp với một đơn vị từ
   ```
   filterDF = flattenDF.filter(flattenDF.firstName == "xiangrui").sort(flattenDF.lastName)
   display(filterDF)
@@ -482,19 +486,19 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
   ```
   Thay vì sử dụng “or”, ta có thể dùng dấu “|” trong hàm fillter().
 
-## 5.6 Sử dụng hàm where()
+#### 5.6 Sử dụng hàm where()
   Hàm where() tương tự như hàm filter(), cụ thể như sau:
   ```
   whereDF = flattenDF.where((col("firstName") == "xiangrui") | (col("firstName") == "michael")).sort(asc("lastName"))
   display(whereDF)
   ```
-## 5.7 Thay thế các giá trị trong DataFrames null bằng fillna()
+#### 5.7 Thay thế các giá trị trong DataFrames null bằng fillna()
   ```
   nonNullDF = flattenDF.fillna("--")
   display(nonNullDF)
   ```
 
-## 5.8 Chỉ truy xuất các hàm bị thiếu giá trị
+#### 5.8 Chỉ truy xuất các hàm bị thiếu giá trị
   Trong ví dụ này, ta truy xuất các giá trị bị thiếu firstname và lastname:
   ```
   filterNonNullDF = flattenDF.filter(col("firstName").isNull() | col("lastName").isNull()).sort("email")
@@ -504,15 +508,14 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
   Còn rất nhiều hàm hữu ích trong Dataframes, tùy vào mục đích sử dụng mà ta gọi các hàm tương ứng. Để có thể tìm hiểu hơn về danh sách các hàm của Dataframes, các bạn có thể truy cập link sau: [DataFrames](https://spark.apache.org/docs/1.6.1/api/java/org/apache/spark/sql/DataFrame.html)
 
 
-
 <a name="refer"></a>
-### Tham khảo
-#### Chương A:
+# Tham khảo
+## Chương A:
 1. https://viblo.asia/p/tong-quan-ve-apache-spark-cho-he-thong-big-data-RQqKLxR6K7z
 2. https://viblo.asia/p/tim-hieu-ve-hadoop-bJzKmOBXl9N
 3. https://sparkbyexamples.com/apache-spark-rdd/spark-reducebykey-usage-with-examples/
 
-#### Chương B:
+## Chương B:
 1. [online] Available at:  https://spark.apache.org/docs/latest/sql-programming-guide.html. [Accessed 29 January 2021]
 2. [online] Available at: https://intellipaat.com/blog/tutorial/spark-tutorial/spark-dataframe/. [Accessed 29 January 2021]
 3. [online] Available at:  https://spark.apache.org/docs/1.6.1/api/java/org/apache/spark/sql/DataFrame.html. [Accessed 29 January 2021]
