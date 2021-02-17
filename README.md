@@ -324,14 +324,14 @@ Kết quả dưới đây thể hiện tần suất xuất hiện của 20 ký t
 
   Một số lưu ý khi đọc tệp với Spark:
 
-    - Nếu sử dụng một đường dẫn trên hệ thống tệp cục bộ, tệp cũng phải có thể truy cập được tại cùng một đường dẫn trên các nút công nhân. Sao chép tệp cho tất cả công nhân hoặc sử dụng hệ thống tệp chia sẻ được gắn kết trên mạng.
-    - Tất cả các phương thức nhập dựa trên tệp của Spark, bao gồm cả textFile, đều hỗ trợ chạy trên thư mục, tệp nén và cả ký tự đại diện. Ví dụ: bạn có thể sử dụng textFile ('/ my / directory'), textFile ('/ my / directory / *. Txt') và textFile ('/ my / directory / *. Gz').
-    - Phương thức textFile cũng có đối số thứ hai tùy chọn để kiểm soát số lượng phân vùng của tệp. Theo mặc định, Spark tạo một phân vùng cho mỗi khối của tệp (các khối là 128MB theo mặc định trong HDFS), nhưng bạn cũng có thể yêu cầu số lượng phân vùng cao hơn bằng cách chuyển một giá trị lớn hơn. Lưu ý rằng bạn không thể có ít phân vùng hơn khối.
+   - Nếu sử dụng một đường dẫn trên hệ thống tệp cục bộ, tệp cũng phải có thể truy cập được tại cùng một đường dẫn trên các nút công nhân. Sao chép tệp cho tất cả công nhân hoặc sử dụng hệ thống tệp chia sẻ được gắn kết trên mạng.
+   - Tất cả các phương thức nhập dựa trên tệp của Spark, bao gồm cả textFile, đều hỗ trợ chạy trên thư mục, tệp nén và cả ký tự đại diện. Ví dụ: bạn có thể sử dụng textFile ('/ my / directory'), textFile ('/ my / directory / *. Txt') và textFile ('/ my / directory / *. Gz').
+   - Phương thức textFile cũng có đối số thứ hai tùy chọn để kiểm soát số lượng phân vùng của tệp. Theo mặc định, Spark tạo một phân vùng cho mỗi khối của tệp (các khối là 128MB theo mặc định trong HDFS), nhưng bạn cũng có thể yêu cầu số lượng phân vùng cao hơn bằng cách chuyển một giá trị lớn hơn. Lưu ý rằng bạn không thể có ít phân vùng hơn khối.
    Ngoài các tệp văn bản, API Python của Spark cũng hỗ trợ một số định dạng dữ liệu khác:
    
-    - SparkContext.wholeTextFiles cho phép bạn đọc một thư mục chứa nhiều tệp văn bản nhỏ và trả về từng tệp dưới dạng cặp (tên tệp, nội dung). Điều này trái ngược với textFile, nó sẽ trả về một bản ghi trên mỗi dòng trong mỗi tệp.
-    - RDD.saveAsPickleFile và SparkContext.pickleFile hỗ trợ lưu RDD ở định dạng đơn giản bao gồm các đối tượng Python được chọn lọc. Lô hàng được sử dụng trong tuần tự hóa dưa chua, với kích thước lô mặc định là 10.
-    - Định dạng đầu vào / đầu ra của SequenceFile và Hadoop.
+   - SparkContext.wholeTextFiles cho phép bạn đọc một thư mục chứa nhiều tệp văn bản nhỏ và trả về từng tệp dưới dạng cặp (tên tệp, nội dung). Điều này trái ngược với textFile, nó sẽ trả về một bản ghi trên mỗi dòng trong mỗi tệp.
+   - RDD.saveAsPickleFile và SparkContext.pickleFile hỗ trợ lưu RDD ở định dạng đơn giản bao gồm các đối tượng Python được chọn lọc. Lô hàng được sử dụng trong tuần tự hóa dưa chua, với kích thước lô mặc định là 10.
+   - Định dạng đầu vào / đầu ra của SequenceFile và Hadoop.
    
   PySpark SequenceFile hỗ trọ tải RDD của các cặp khóa-giá trị bên trong Java, chuyển đổi Writables thành các kiểu Java cơ sở và chọn các đối tượng Java kết quả bằng cách sử dụng Pyrolite. Khi lưu RDD của các cặp khóa-giá trị vào SequenceFile, PySpark thực hiện ngược lại. Nó giải nén các đối tượng Python thành các đối tượng Java và sau đó chuyển đổi chúng thành Writables. Các Writables sau được tự động chuyển đổi.
   
@@ -374,13 +374,149 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
 
   Spark cũng tự động lưu giữ một số dữ liệu trung gian trong các hoạt động xáo trộn (ví dụ: ReduceByKey), ngay cả khi người dùng không gọi vẫn tiếp tục. Điều này được thực hiện để tránh tính toán lại toàn bộ dữ liệu đầu vào nếu một nút bị lỗi trong quá trình trộn. Chúng tôi vẫn khuyến nghị người dùng tiếp tục gọi RDD kết quả nếu họ định sử dụng lại nó.
 
+<a name="chB_III"></a>
+
+## III. Spark Dataframes
+
+<a name="chB_III_1"></a>
+
+### 1. Tổng quan
+  Trong Spark, DataFrames là tập hợp dữ liệu phân tán, được tổ chức thành các hàng và cột. Mỗi cột trong DataFrame có tên và kiểu liên kết. DataFrames tương tự như các bảng cơ sở dữ liệu truyền thống, được cấu trúc và ngắn gọn. Có thể nói rằng DataFrames là cơ sở dữ liệu quan hệ với các kỹ thuật tối ưu hóa tốt hơn.
+  Spark DataFrames có thể được tạo từ nhiều nguồn khác nhau, chẳng hạn như bảng Hive, bảng nhật ký, cơ sở dữ liệu bên ngoài hoặc RDD hiện có. DataFrames cho phép xử lý một lượng lớn dữ liệu.
+ <a name="chB_III_2"></a>
+### 2. Sử dụng DataFrames bổ sung cho RDD trong Spark
+  Khi Apache Spark 1.3 ra mắt, nó đi kèm với một API mới có tên là DataFrames giúp giải quyết các hạn chế về hiệu suất và khả năng mở rộng xảy ra trong khi sử dụng RDD.
+
+  Khi không có nhiều không gian lưu trữ trong bộ nhớ hoặc trên đĩa, các RDD sẽ không hoạt động bình thường khi chúng cạn kiệt. Bên cạnh đó, Spark RDD không có khái niệm về lược đồ—cấu trúc của một cơ sở dữ liệu xác định các đối tượng của nó. RDD lưu trữ cả dữ liệu có cấu trúc và không có cấu trúc cùng nhau, điều này không hiệu quả lắm.
+
+  RDD không thể sửa đổi hệ thống theo cách để nó chạy hiệu quả hơn. Các RDD không cho phép chúng tôi gỡ lỗi trong thời gian chạy. Chúng lưu trữ dữ liệu dưới dạng một tập hợp các đối tượng Java.
+
+  Các RDD sử dụng kỹ thuật tuần tự hóa (chuyển đổi một đối tượng thành một dòng byte để cho phép xử lý nhanh hơn) và thu gom rác (một kỹ thuật quản lý bộ nhớ tự động phát hiện các đối tượng không sử dụng và giải phóng chúng khỏi bộ nhớ). Điều này làm tăng chi phí trên bộ nhớ của hệ thống vì chúng rất dài.
+
+  Đây là khi Spark DataFrames được giới thiệu để khắc phục những hạn chế mà Spark RDD có. Bây giờ, điều gì làm cho Spark DataFrames trở nên độc đáo? Hãy cùng xem các tính năng của Spark DataFrames khiến chúng trở nên phổ biến.
+  <a name="chB_III_3"></a>
+### 3. Tính năng chính của DataFrames
+  Một số tính năng độc đáo của DataFrames là:
+    - Sử dụng các công cụ tối ưu hóa input: DataFrames sử dụng các công cụ tối ưu hóa đầu vào, ví dụ: Trình tối ưu hóa xúc tác, để xử lý dữ liệu hiệu quả. Chúng ta có thể sử dụng cùng một công cụ cho tất cả các API Python, Java, Scala và R DataFrame.
+    - Xử lý dữ liệu có cấu trúc: DataFrames cung cấp một cái nhìn sơ đồ về dữ liệu. Ở đây, dữ liệu có một số ý nghĩa đối với nó khi nó đang được lưu trữ.
+    - Quản lý bộ nhớ tùy chỉnh: Trong RDD, dữ liệu được lưu trữ trong bộ nhớ, trong khi DataFrames lưu trữ dữ liệu ngoài đống (bên ngoài không gian chính của Java Heap, nhưng vẫn bên trong RAM), do đó làm giảm quá tải bộ sưu tập rác.
+    - Tính linh hoạt: DataFrames, giống như RDD, có thể hỗ trợ nhiều định dạng dữ liệu khác nhau, chẳng hạn như CSV, Cassandra, v.v.
+    - Khả năng mở rộng: DataFrames có thể được tích hợp với nhiều công cụ Big Data khác và chúng cho phép xử lý megabyte đến petabyte dữ liệu cùng một lúc.
+<a name="chB_III_4"></a>
+### 4. Khởi tạo DataFrames
+  Có nhiều cách để tạo DataFrames, trong đó có 3 phương pháp dưới đây là phổ biến nhất:
+## 4.1 Khởi tạo DataFrames từ tập tin JSON
+  JSON là viết tắt của JavaScript Object Notation, là một loại tệp lưu trữ các đối tượng cấu trúc dữ liệu đơn giản ở định dạng .json. Nó chủ yếu được sử dụng để truyền dữ liệu giữa các máy chủ Web.
+  Khi nói đến Spark, các tệp .json đang được tải không phải là tệp .json điển hình. Chúng ta không thể tải tệp JSON bình thường vào DataFrame. Tệp JSON mà chúng ta tải phải ở định dạng được cung cấp bên dưới:
+![](spark-properties_RDDs_DataFrames/jsonFormat.png)
+
+  Các tệp JSON có thể được tải lên DataFrames bằng cách sử dụng hàm read.JSON, với tên tệp mà chúng tôi muốn tải lên. Ví dụ, chúng ta đang tải bảng đếm huy chương Olympic lên DataFrame. Tổng cộng có 10 trường. Hàm printSchema () in ra lược đồ của DataFrame như dưới đây:
+![](spark-properties_RDDs_DataFrames/df_example.png)
+
+## 4.2 Khởi tạo DataFrames từ RDDs đã tạo sẵn
+  DataFrames cũng có thể được tạo từ các RDD hiện có. Đầu tiên, chúng ta tạo một RDD và sau đó tải RDD đó vào một DataFrame bằng cách sử dụng hàm createDataFrame (Name_of_the_rdd_file).
+  Trong hình dưới đây, trước tiên chúng ta đang tạo một RDD, chứa các số từ 1 đến 10 và các hình khối của chúng. Sau đó, chúng tôi sẽ tải RDD đó vào DataFrame.
+![](spark-properties_RDDs_DataFrames/df_byRDD.png)
+
+## 4.3 Khởi tạo DataFrames từ tập tin CSV
+  Chúng ta cũng có thể tạo DataFrames bằng cách tải các tệp .csv. Đây là một ví dụ về tải tệp .csv lên DataFrame:
+  ![](spark-properties_RDDs_DataFrames/  df_byCSV.png)
+
+<a name="chB_III_5"></a>
+### 5. Làm việc với DataFrames
+
+## 5.1 Union hai DataFrames
+  Để nối hai DataFrames với nhau, ta sử dụng câu lệnh sau:
+  ```
+  unionDF = df1.union(df2)
+	display(unionDF)
+  ```
+## 5.2 Ghi DataFrame hợp nhất vào tệp Parquet
+
+  ```
+  # Remove the file if it exists
+  dbutils.fs.rm("/tmp/databricks-df-example.parquet", True)
+  unionDF.write.parquet("/tmp/databricks-df-example.parquet")
+  ```
+## 5.3 Đọc DataFrame từ tệp Parquet
+
+  ```
+  parquetDF = spark.read.parquet("/tmp/databricks-df-example.parquet")
+  display(parquetDF)
+   ```
+
+## 5.4 Explode cột trong DataFrames
+  Ta lấy ví dụ cần giải phóng cột employees như sau:
+  ```
+  from pyspark.sql.functions import explode
+
+  explodeDF = unionDF.select(explode("employees").alias("e"))
+  flattenDF = explodeDF.selectExpr("e.firstName", "e.lastName", "e.email", "e.salary")
+    
+  flattenDF.show()
+   ```
+   Kết quả là:
+  
+  |firstName|lastName|               email|salary|
+  |---------|--------|--------------------|------|
+  |  michael|armbrust|no-reply@berkeley...|100000|
+  | xiangrui|    meng|no-reply@stanford...|120000|
+  |    matei|    null|no-reply@waterloo...|140000|
+  |     null| wendell|no-reply@berkeley...|160000|
+  |  michael| jackson| no-reply@neverla.nd| 80000|
+  |     null| wendell|no-reply@berkeley...|160000|
+  | xiangrui|    meng|no-reply@stanford...|120000|
+  |    matei|    null|no-reply@waterloo...|140000|
+
+## 5.5 Sử dụng filter () để trả về các hàng khớp với một đơn vị từ
+  ```
+  filterDF = flattenDF.filter(flattenDF.firstName == "xiangrui").sort(flattenDF.lastName)
+  display(filterDF)
+  ```
+  ```
+  from pyspark.sql.functions import col, asc
+
+  # Use `|` instead of `or`
+  filterDF = flattenDF.filter((col("firstName") == "xiangrui") | (col("firstName") == "michael")).sort(asc("lastName"))
+  display(filterDF)
+  ```
+  Thay vì sử dụng “or”, ta có thể dùng dấu “|” trong hàm fillter().
+
+## 5.6 Sử dụng hàm where()
+  Hàm where() tương tự như hàm filter(), cụ thể như sau:
+  ```
+  whereDF = flattenDF.where((col("firstName") == "xiangrui") | (col("firstName") == "michael")).sort(asc("lastName"))
+  display(whereDF)
+  ```
+## 5.7 Thay thế các giá trị trong DataFrames null bằng fillna()
+  ```
+  nonNullDF = flattenDF.fillna("--")
+  display(nonNullDF)
+  ```
+
+## 5.8 Chỉ truy xuất các hàm bị thiếu giá trị
+  Trong ví dụ này, ta truy xuất các giá trị bị thiếu firstname và lastname:
+  ```
+  filterNonNullDF = flattenDF.filter(col("firstName").isNull() | col("lastName").isNull()).sort("email")
+  display(filterNonNullDF)
+  ```
+
+  Còn rất nhiều hàm hữu ích trong Dataframes, tùy vào mục đích sử dụng mà ta gọi các hàm tương ứng. Để có thể tìm hiểu hơn về danh sách các hàm của Dataframes, các bạn có thể truy cập link sau: [DataFrames](https://spark.apache.org/docs/1.6.1/api/java/org/apache/spark/sql/DataFrame.html)
+
+
 
 <a name="refer"></a>
 ### Tham khảo
-Chương A:
+#### Chương A:
+1. https://viblo.asia/p/tong-quan-ve-apache-spark-cho-he-thong-big-data-RQqKLxR6K7z
+2. https://viblo.asia/p/tim-hieu-ve-hadoop-bJzKmOBXl9N
+3. https://sparkbyexamples.com/apache-spark-rdd/spark-reducebykey-usage-with-examples/
 
-https://viblo.asia/p/tong-quan-ve-apache-spark-cho-he-thong-big-data-RQqKLxR6K7z
+#### Chương B:
+1. [online] Available at:  https://spark.apache.org/docs/latest/sql-programming-guide.html. [Accessed 29 January 2021]
+2. [online] Available at: https://intellipaat.com/blog/tutorial/spark-tutorial/spark-dataframe/. [Accessed 29 January 2021]
+3. [online] Available at:  https://spark.apache.org/docs/1.6.1/api/java/org/apache/spark/sql/DataFrame.html. [Accessed 29 January 2021]
+4. [online] Available at: https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html. [Accessed 29 January 2021]
+5. [online] Available at: https://spark.apache.org/docs/latest/rdd-programming-guide.html#rdd-persistence. [Accessed 29 January 2021]
+6. [online] Available at:  https://spark.apache.org/docs/latest/configuration.html#viewing-spark-properties
 
-https://viblo.asia/p/tim-hieu-ve-hadoop-bJzKmOBXl9N
-
-https://sparkbyexamples.com/apache-spark-rdd/spark-reducebykey-usage-with-examples/
