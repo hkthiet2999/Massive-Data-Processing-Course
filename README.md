@@ -34,9 +34,20 @@
      - [3. Tính năng chính của DataFrames](#chB_III_3)
      - [4. Khởi tạo DataFrames](#chB_III_4)
      - [5. Làm việc với DataFrames](#chB_III_5)
- - [C.Thuật toán A_priori trên môi trường PySpark và bài toán Association Rule](#chC)
+- [C.Thuật toán A_priori trên môi trường PySpark và bài toán Association Rule](#chC)
    - [I. Tổng quan](#chC_I)
    - [II. Bài toán Association Rules với cơ sở dữ liệu store_data](#chC_II)
+- [D. Thuật toán Locality Sensitive Hashing trong bài toán Finding Similar Documents in Massive Data](#chD)
+  - [I. Tổng quan](#chD_I)
+    - [ 1. Bài toán tìm kiếm các văn bản tương tự trong tập văn bản](#chD_I_1)
+    - [ 2. Jaccard Similarity](#chD_I_2)
+  - [II. Phương pháp Shingling](#chD_II)
+  - [III. Phương pháp Minhashing](#chD_III)
+  - [IV. Phương pháp Locality Sensitive Hashing](#chD_IV)
+     - [1. Phương pháp LSH trong tập tài liệu văn bản](#chD_IV_1)
+     - [2. Phương pháp LSH cho Minhash Signatures](#chD_IV_2)
+     - [3. Phân tích phương pháp LSH](#chD_IV_3)
+
 - [Tham khảo](#refer)
 <a name="chA"></a>
 # A.Trình bày tổng quan về Apache Spark và Mapreduce
@@ -538,7 +549,7 @@ Trong repo này của mình có code minh họa bài toán tìm Association Rule
 # D. Thuật toán Locality Sensitive Hashing trong bài toán Finding Similar Documents in Massive Data
  Mình may mắn được tiếp cận với một đề tài khá hay trong khóa học về Massive Data Processing, cụ thể trong đề tài này mình sẽ nghiên cứu về thuật toán Locality Sensitive Hashing (LSH) trong bài toán tìm kiếm các văn bản tương tự trong tập văn bản. Dưới đây là minh họa cho đề tài:   
  
- ![](LSH-for-Finding-Similar-Items/img/ midterm_requirements.png)
+ ![](LSH-for-Finding-Similar-Items/img/midterm_requirements.png)
  
  Dưới đây là phần mình tìm hiểu về thuật toán LSH và ứng dụng vào bài toán tìm các văn bản tương tự trong tập văn bản,phần này chiếm 3 điểm trong đề tài nên mình viết khá ngắn gọn để tiện trình bày trước lớp nhưng cũng rất đầy đủ và chi tiết, mời các bạn đọc qua.
  <a name="chD_I"></a>
@@ -591,7 +602,7 @@ Ví dụ minh họa bên dưới cho thấy một ma trận đặc trưng cho c�
  Điều đặc biệt ở đây là số cột trong ma trận signatures chỉ bằng “n”. Do đó, kích thước của ma trận signatures nhỏ hơn rất nhiều so với kích thước của ma trận đặc trưng. Hơn nữa, với mối quan hệ mà phương pháp minhash so với Jaccard Similarity đã đề cập ở trên, tính tương tự của các tài liệu sẽ được giữ nguyên ở một mức độ nào đó và sẽ không biến mất sau các phép biến đổi này. 
  Trên thực tế, không thể áp dụng hoán vị cho một ma trận đặc trưng lớn. Ngay cả việc chọn một hoán vị ngẫu nhiên từ một số lượng lớn các hàng và sắp xếp các dòng vào thứ tự dựa trên hoán vị cũng đã khá tốn thời gian. Giải pháp tối ưu nhất là ta áp dụng hoán vị cho ma trận bằng cách sử dụng các hàm băm. Thay vì chọn n hoán vị ngẫu nhiên từ các hàng, chúng ta chọn ngẫu nhiên n hàm băm của h1, h2,…, hn từ các hàng. Chúng ta coi SIG (i, c) là một phần tử của ma trận chữ ký cho hàm băm i và cột c. Đầu tiên, chúng ta đặt SIG (i, c) bằng vô cực cho tất cả các chữ “i” và “c”. Để tính toán ma trận signatures, ta duyệt lần lượt từng hàng của ma trận đặc trưng. Có thể minh họa thuật toán này bằng 5 bước trong mã giã dưới đây:
  
- ![](LSH-for-Finding-Similar-Items/img/ minhash_pscode.png)
+ ![](LSH-for-Finding-Similar-Items/img/minhash_pscode.png)
  
   Từ thuật toán trên ta có thể tính toán ma trận minhash của ma trận đặc trưng trong Bảng 1. Đầu tiên, chúng ta cần chọn n hàm minhash. Đối với ví dụ trong Bảng 1, ta đặt n bằng 2 và chọn hai hàm băm là h1 (x) = x + 1 mod 5 và h2 (x) = 3x + 1 mod 5. Sau đó đánh số thứ tự các hàng từ 0 đến 4. Bảng 3 dưới đây là ma trận đặc trưng cùng với các giá trị được tính cho các hàm băm cho mỗi hàng:
   
@@ -618,14 +629,14 @@ Ví dụ minh họa bên dưới cho thấy một ma trận đặc trưng cho c�
 ### 4.2 Phương pháp LSH cho Minhash Signatures
  Nếu ta có một minhash signatures của các items trong tập dữ liệu, ta có thể áp dụng phương pháp LSH bằng cách chia ma trận signatures thành b dải sao cho mỗi dải bao gồm r hàng (n = br). Sau đó đối với mỗi dải ta sẽ chọn một hàm băm và hàm vectơ này sẽ cung cấp nhiều nhóm sử dụng r số nguyên cùng với một số lượng lớn các hàm băm cho chúng. Chúng ta có thể sử dụng cùng một hàm băm cho tất cả các dải, nhưng chúng ta sử dụng một mảng riêng để băm trong mỗi dải để các cột có vectơ tương tự không được kết nối với cùng một nhóm trong các dải khác nhau. Ví dụ bên dưới cho thấy các thành phần của ma trận signatures bao gồm 12 dòng được chia thành 4 dải và mỗi dải có 3 hàng:
 
- ![](LSH-for-Finding-Similar-Items/img/ band14.png)
+ ![](LSH-for-Finding-Similar-Items/img/band14.png)
  
  Trong hình trên, cột thứ hai và thứ tư trong dải đầu tiên hiển thị vectơ [0, 2, 1] và chúng được kết nối với cùng một nhóm trong phép băm của dải đầu tiên. Do đó, bất kể thực tế là các cột này có giống nhau ở ba dải khác hay không, cặp cột này có thể được coi là một cặp ứng cử viên. Hơn nữa, hai cột không phù hợp trong dải đầu tiên có cơ hội trở thành một cặp ứng cử viên trong ba dải khác. Trên thực tế, có thể chúng giống nhau ở mỗi nhóm khác. Ở bất kỳ mức độ nào, hai cột cực kỳ giống nhau sẽ giống nhau nhất ở một số dải. Do đó, phương pháp này trực tiếp “match” các cột tương tự lại với nhau với xác suất cao hơn so với các cặp khác nhau.
 <a name="chD_IV_3"></a>
 ### 4.3 Phân tích phương pháp LSH
  Giả sử ta sử dụng b dải, mỗi dải chứa r hàng và giả sử một cặp tài liệu văn bản nào đó có Jaccard Similarity với giá trị là s. Ta biết rằng khả năng các minhash signatures cho các tài liệu văn bản này trong mỗi dòng nhất định của ma trận signatures phù hợp với nhau bằng s. Khả năng các tài liệu này (hoặc tốt nhất là signatures của chúng) là một cặp ứng cử viên có thể được tính toán như sau:
 
- ![](LSH-for-Finding-Similar-Items/img/ text.png)
+ ![](LSH-for-Finding-Similar-Items/img/text.png)
 
 
  Ta có một khái niện mới là “giới hạn ngưỡng” (threshold limit), là số lượng cặp văn bản tương tự trong s khi quá trình tăng dần của biểu đồ đạt đến giới hạn cao nhất. Số lượng giới hạn ngưỡng giúp ta xác định chất lượng của sự phát hiện tương đồng. Chất lượng của sự tương đồng này phụ thuộc vào hai giá trị false positive và false negative. Giới hạn ngưỡng này là một hàm số của b và r và giá trị được tính bằng xấp xỉ t = 〖(1/b)〗^(1/r) . Ví dụ: nếu b = 16 và r = 4, thì ngưỡng xấp xỉ tại s = 1/2 , vì căn mũ 4 của 1/16 là 1/2.
@@ -653,6 +664,6 @@ Như đã trình bày ở trên, khả năng hai cặp có Jaccard Similarity c�
 1. [online] Available at:  https://ongxuanhong.wordpress.com/2015/08/23/khai-thac-luat-tap-pho-bien-frequent-itemsets-voi-thuat-toan-apriori/ [Accessed 21 February 2021]
 
 ## Chương D:
-1. a
-2. b
-3. ccccc
+1. https://github.com/smoothkt4951/Massive-Data-Processing-Course/tree/main/LSH-for-Finding-Similar-Items/documents/03-lsh.pdf
+2. https://github.com/smoothkt4951/Massive-Data-Processing-Course/blob/main/LSH-for-Finding-Similar-Items/documents/04-lsh_theory.pdf
+3. https://github.com/smoothkt4951/Massive-Data-Processing-Course/blob/main/LSH-for-Finding-Similar-Items/documents/ch3_2.pdf
