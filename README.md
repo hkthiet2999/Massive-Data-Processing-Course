@@ -3,7 +3,7 @@
   Bài viết này được tạo ra với mục đích ghi lại toàn bộ quá trình học tập, nghiên cứu về Xử Lý Dữ Liệu Lớn của mình, qua đó tổng hợp lại các kiến thức từ tổng quan đến chi tiết những gì mình học tập, nghiên cứu và thực hành được. Trong mỗi phần mình trình bày về lý thuyết sẽ có các phần code demo, phần demo sẽ được code bằng ngôn ngữ Python3, lưu file với đuôi là .ipynb. 
 
 ## Mục lục
-- [A.Trình bày tổng quan về Apache Spark và Mapreduce](#chA)
+- [A. Trình bày tổng quan về Apache Spark và Mapreduce](#chA)
   - [I. Tổng quan về Apache Spark](#I.-tong-quan-ve-apache-spark)
     - [ 1. Giới thiệu](#1.-gioi-thieu)
     - [ 2. Các thành phần của Apache Spark](#2.-cac-thanh-phan-cua-apache-spark)
@@ -18,7 +18,7 @@
     - [ 6. Luồng dữ liệu nền tảng của Mapreduce](#6.-luong-du-lieu)
     - [ 7. Ứng dụng của Mapreduce](#7.-ung-dung)
   - [III. Ví dụ minh họa](#vd)
-- [B.Trình bày tổng quan về Spark Properties, Spark RDDs và Spark Dataframes](#chB)
+- [B. Trình bày tổng quan về Spark Properties, Spark RDDs và Spark Dataframes](#chB)
   - [I. Spark properties](#chB_I)
     - [ 1. Tổng quan](#chB_I_1)
     - [ 2. Tải động đối với các thuộc tính của Spark](#chB_I_2)
@@ -34,7 +34,7 @@
      - [3. Tính năng chính của DataFrames](#chB_III_3)
      - [4. Khởi tạo DataFrames](#chB_III_4)
      - [5. Làm việc với DataFrames](#chB_III_5)
-- [C.Thuật toán A_priori trên môi trường PySpark và bài toán Association Rule](#chC)
+- [C. Thuật toán A_priori trên môi trường PySpark và bài toán Association Rule](#chC)
    - [I. Tổng quan](#chC_I)
    - [II. Bài toán Association Rules với cơ sở dữ liệu store_data](#chC_II)
 - [D. Thuật toán Locality Sensitive Hashing trong bài toán Finding Similar Documents in Massive Data](#chD)
@@ -47,6 +47,7 @@
      - [1. Phương pháp LSH trong tập tài liệu văn bản](#chD_IV_1)
      - [2. Phương pháp LSH cho Minhash Signatures](#chD_IV_2)
      - [3. Phân tích phương pháp LSH](#chD_IV_3)
+  - [V. Crawling data từ các đầu báo Việt Nam](#chD_V)
 
 - [Tham khảo](#refer)
 <a name="chA"></a>
@@ -644,7 +645,7 @@ Ví dụ minh họa bên dưới cho thấy một ma trận đặc trưng cho c�
 
  Trong phương pháp LSH, có hai khả năng xảy ra là false positive và false negative. Các kết quả false positive là các cặp khác nhau được băm vào cùng một nhóm và false negative là các cặp tương tự không được gửi đến cùng một nhóm. Có nghĩa là các kết quả false positive là các cặp bị nhầm lẫn là một cặp ứng cử viên và các kết quả false negative là các cặp bị nhầm lẫn không được coi là một cặp ứng viên. 
 Như đã trình bày ở trên, khả năng hai cặp có Jaccard Similarity của s có thể trở thành một cặp ứng cử viên bằng 1 -〖1- s^r〗^b.  Bản chất bên trong của đồ thị hàm số f(s) = 1 -〖1- s^r〗^b này cho ta biết nếu tính từ 0 đến giới hạn ngưỡng (t) sẽ được kết quả bằng số lượng false positive vì các cặp có Jaccard Similarity nhỏ hơn t sẽ không được coi là cặp ứng viên. Trong hình dưới đây biểu diễn đồ thị của hàm f(s) cùng với các khu vực liên quan đến số lượng false positive và false negative.
-
+<a name="chD_V"></a>
 ## V. Crawling data từ các đầu báo Việt Nam
  Đây là phần chiếm 2 điểm cộng trong đề tài này, yêu cầu là xây dựng một hệ thống để crawling dữ liệu từ các trang tin tức, lọc bỏ bản tin trùng để xây dựng một trang tin tức tổng hợp.
  Do vấn đề crawling data từ các trang tin tức ở Việt Nam sẽ rất cần thiết cho các bạn học sinh, sinh viên đang nghiên cứu về lĩnh vực Big Data, ngoài ra cấu trúc website của các trang báo thay đổi liên tục đòi hỏi việc update source code mới có crawl dữ liệu nên mình tạo một repo [crawling-VietNam-News](https://github.com/smoothkt4951/crawling-VietNam-News) riêng chứa source và mô tả, mời các bạn ghé thăm, nếu thấy hữu ích hãy cho mình một star để ửng hộ mình nha <3.
