@@ -607,17 +607,17 @@ Ví dụ minh họa bên dưới cho thấy một ma trận đặc trưng cho c�
   Từ thuật toán trên ta có thể tính toán ma trận minhash của ma trận đặc trưng trong Bảng 1. Đầu tiên, chúng ta cần chọn n hàm minhash. Đối với ví dụ trong Bảng 1, ta đặt n bằng 2 và chọn hai hàm băm là h1 (x) = x + 1 mod 5 và h2 (x) = 3x + 1 mod 5. Sau đó đánh số thứ tự các hàng từ 0 đến 4. Bảng 3 dưới đây là ma trận đặc trưng cùng với các giá trị được tính cho các hàm băm cho mỗi hàng:
   
 			Row	Element	S1	S2	S3	S4	x+1 mod 5	3x+1 mod 5
-			0	a	1	0	0	1	1	1
-			1	b	0	0	1	0	2	4
-			2	c	0	1	0	1	3	2
-			3	d	1	0	1	1	4	0
-			4	e	0	0	1	0	0	3
+			0	a	1	0	0	1	1		1
+			1	b	0	0	1	0	2		4
+			2	c	0	1	0	1	3		2
+			3	d	1	0	1	1	4		0
+			4	e	0	0	1	0	0		3
  Bây giờ, để tính ma trận signatures có 4 hàng 2 cột, trước tiên chúng ta đặt tất cả các mục của nó bằng ∞ và sau đó thực hiện thuật toán trên ma trận đặc trưng đã cho các giá trị tính được trước đó. Sau khi thực hiện thuật toán và xét tất cả các dòng của ma trận đặc trưng, ma trận minhash signatures sẽ có kết quả như sau:
 
 
 			Functions	S1	S2	S3	S4
-			h1	1	3	0	1
-			h2	0	2	0	0
+			h1		1	3	0	1
+			h2		0	2	0	0
  Theo như đã trình bày ở trên, sự giống nhau của các tập có thể được ước lượng bằng cách nhìn vào ma trận minhash signatures này. Tuy nhiên sự ước lượng này sẽ chính xác khi ma trận minhash signatures quá lớn, ngược lại ước tính sẽ không đủ chính xác cho các ma trận minhash signatures có kích thước rất nhỏ.
 <a name="chD_IV"></a>
 ## IV. Phương pháp Locality Sensitive Hashing
@@ -640,10 +640,10 @@ Ví dụ minh họa bên dưới cho thấy một ma trận đặc trưng cho c�
 
  ![](LSH-for-Finding-Similar-Items/img/cruve.png)
 
- Ta có một khái niện mới là “giới hạn ngưỡng” (threshold limit), là số lượng cặp văn bản tương tự trong s khi quá trình tăng dần của biểu đồ đạt đến giới hạn cao nhất. Số lượng giới hạn ngưỡng giúp ta xác định chất lượng của sự phát hiện tương đồng. Chất lượng của sự tương đồng này phụ thuộc vào hai giá trị false positive và false negative. Giới hạn ngưỡng này là một hàm số của b và r và giá trị được tính bằng xấp xỉ t = 〖(1/b)〗^(1/r) . Ví dụ: nếu b = 16 và r = 4, thì ngưỡng xấp xỉ tại s = 1/2 , vì căn mũ 4 của 1/16 là 1/2.
+ Ta có một khái niện mới là “giới hạn ngưỡng” (threshold limit), là số lượng cặp văn bản tương tự trong s khi quá trình tăng dần của biểu đồ đạt đến giới hạn cao nhất. Số lượng giới hạn ngưỡng giúp ta xác định chất lượng của sự phát hiện tương đồng. Chất lượng của sự tương đồng này phụ thuộc vào hai giá trị false positive và false negative. Giới hạn ngưỡng này là một hàm số của b và r và giá trị được tính bằng xấp xỉ t = 〖1/b〗^(1/r) . Ví dụ: nếu b = 16 và r = 4, thì ngưỡng xấp xỉ tại s = 1/2 , vì căn mũ 4 của 1/16 là 1/2.
 
  Trong phương pháp LSH, có hai khả năng xảy ra là false positive và false negative. Các kết quả false positive là các cặp khác nhau được băm vào cùng một nhóm và false negative là các cặp tương tự không được gửi đến cùng một nhóm. Có nghĩa là các kết quả false positive là các cặp bị nhầm lẫn là một cặp ứng cử viên và các kết quả false negative là các cặp bị nhầm lẫn không được coi là một cặp ứng viên. 
-Như đã trình bày ở trên, khả năng hai cặp có Jaccard Similarity của s có thể trở thành một cặp ứng cử viên bằng 1 -  〖(1- s^r)〗^b.  Bản chất bên trong của đồ thị hàm số f(s) = 1 -  〖(1- s^r)〗^b này cho ta biết nếu tính từ 0 đến giới hạn ngưỡng (t) sẽ được kết quả bằng số lượng false positive vì các cặp có Jaccard Similarity nhỏ hơn t sẽ không được coi là cặp ứng viên. Trong hình dưới đây biểu diễn đồ thị của hàm f(s) cùng với các khu vực liên quan đến số lượng false positive và false negative.
+Như đã trình bày ở trên, khả năng hai cặp có Jaccard Similarity của s có thể trở thành một cặp ứng cử viên bằng 1 -〖1- s^r〗^b.  Bản chất bên trong của đồ thị hàm số f(s) = 1 -〖1- s^r〗^b này cho ta biết nếu tính từ 0 đến giới hạn ngưỡng (t) sẽ được kết quả bằng số lượng false positive vì các cặp có Jaccard Similarity nhỏ hơn t sẽ không được coi là cặp ứng viên. Trong hình dưới đây biểu diễn đồ thị của hàm f(s) cùng với các khu vực liên quan đến số lượng false positive và false negative.
 
 ## V. Crawling data từ các đầu báo Việt Nam
  Đây là phần chiếm 2 điểm cộng trong đề tài này, yêu cầu là xây dựng một hệ thống để crawling dữ liệu từ các trang tin tức, lọc bỏ bản tin trùng để xây dựng một trang tin tức tổng hợp.
