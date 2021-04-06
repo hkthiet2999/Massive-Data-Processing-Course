@@ -48,6 +48,7 @@
      - [2. Phương pháp LSH cho Minhash Signatures](#chD_IV_2)
      - [3. Phân tích phương pháp LSH](#chD_IV_3)
   - [V. Crawling data từ các đầu báo Việt Nam](#chD_V)
+  - [VI. Bài toán Finding Similar Documents](#chD_VI)
 
 - [Tham khảo](#refer)
 <a name="chA"></a>
@@ -652,7 +653,9 @@ Như đã trình bày ở trên, khả năng hai cặp có Jaccard Similarity c�
  <a name="chD_VI"></a>
 ## VI. Bài toán Finding Similar Documents 
  Với scripts [crawling-data](https://github.com/smoothkt4951/crawling-VietNam-News) ở trên, bạn có thể crawl bao nhiêu dữ liệu tùy vào độ kiên trì, nhẫn nại của bạn. Để tiết kiệm thời gian, bạn có thể mở cùng lúc nhiều terminal để chạy script đó hoặc chạy song song trên google colab. Mình mới crawl sơ sơ được tầm 22k documents và mục tiêu là tận 100k documents lận, nhưng khi bỏ vào để test với project này thì chỉ dùng tầm 500 documents để tiết kiệm thời gian. Đây là link download dataset để test source code trong projects này: [test_dataset]( https://drive.google.com/file/d/17LrjoXqRtXsK9P9McO1iuXbX0usuRwY9/view?usp=sharing). 
+ 
  Sau khi đã crawl dữ liệu từ các trang báo, bạn có thể đưa vào một đoạn text trong một bài báo bất kỳ nào đó, chương trình sẽ trả về cho bạn một bài báo có contents tương tự với đoạn text của bạn. Mục đích của việc này là tránh sự trùng lắp, đạo văn giữa các bài báo với nhau, từ đó tổng hợp thành một trang báo tương tự trang baomoi.com tổng hợp tất cả các bài báo từ nhiều nguồn báo trong nước.
+ 
  Đây là file ipynb chứa source code giải bài toán tìm kiếm văn bản tương tự trong tập văn bản lớn: [colab-not_using_pyspark_mini.ipynb](LSH-for-Finding-Similar-Items/main/colab-not_using_pyspark_mini.ipynb). Code này giải quyết bài toán theo 3 bước như đã trình bày trong phần lý thuyết, tuy nhiên để cải thiện tốc độ xử lý thì nhóm mình lập trình song song trên môi trường Pyspark, kết quả được lưu trong file [colab-not_using_pyspark_mini.ipynb](LSH-for-Finding-Similar-Items/main/colab-using_pyspark.ipynb). Trong các file ipynb này trình bày được các kết quả qua từng bước chạy thuật toán nên mình sẽ không trình bày dài dòng ở đây, mời bạn đọc xem qua thành quả của nhóm mình nha.
 <a name="refer"></a>
 # Tham khảo
