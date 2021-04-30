@@ -1,13 +1,25 @@
 <a name="chC"></a>
 
-# C. Thuật toán A_priori trên môi trường PySpark và bài toán Association Rule
+# Thuật toán A_priori trên môi trường PySpark và bài toán Association Rule
 
 <a name="chC_I"></a>
 
 ## I. Tổng quan 
 
  Thuật toán Apriori được công bố bởi R. Agrawal và R. Srikant vào năm 1994 vì để tìm các tập phổ biến trong một bộ dữ liệu lớn. Tên của thuật toán là Apriori vì nó sử dụng kiến thức đã có từ trước (prior) về các thuộc tính, vật phẩm thường xuyên xuất hiện trong cơ sở dữ liệu. Để cải thiện hiệu quả của việc lọc các mục thường xuyên theo cấp độ, một thuộc tính quan trọng được sử dụng gọi là thuộc tính Apriori giúp giảm phạm vi tìm kiếm của thuật toán.
- Để minh họa cho các khái niệm, ta lấy ví dụ CSDL với các giao dịch sau. | TID (mã giao dịch) | Itemset (tập các hạng mục) | 1 | A, B, E 2 | B, D 3 | B, C 4 | A, B, D 5 | A, C 6 | B, C 7 | A, C 8 | A, B, C, E 9 | A, B, C
+### 1. Các khái niệm cơ bản
+ Để minh họa cho các khái niệm, ta lấy ví dụ CSDL với các giao dịch sau. 
+| TID (mã giao dịch) | Itemset (tập các hạng mục) |
+|---|---|
+| 1 | A, B, E |
+| 2 | B, D |
+| 3 | B, C |
+| 4 | A, B, D |
+| 5 | A, C |
+| 6 | B, C |
+| 7 | A, C |
+|8 | A, B, C, E |
+| 9 | A, B, C |
 
 - Hạng mục (item): mặt hàng A = apple, B = bread, C = cereal, D = donuts, E = eggs.
 - Tập các hạng mục (itemset): danh sách các hạng mục trong giỏ hàng như {A, B, C, D, E}.
@@ -19,8 +31,28 @@
 - Tập phổ biến tối đại (max pattern) thỏa supp(X) \geq minsupp không tồn tại |X’| > |X|, với X’ cũng phổ biến
 - Tập phổ biến đóng (closed pattern) thỏa supp(S) \geq minsupp không tồn tại |X’| > |X| mà supp(X’) = supp(X)
 - Luật kết hợp (association rule): kí hiệu X \rightarrow Y, nghĩa là khi X có mặt thì Y cũng có mặt (với xác suất nào đó). Ví dụ, A \rightarrow B; A,B \rightarrow C; B,D \rightarrow E.
-- Độ tin cậy (confidence): được tính bằng conf(X) = \frac{supp(X+Y)}{supp(X)}.
+- Độ tin cậy (confidence): được tính bằng conf(X) = supp(X+Y)/supp(X)
+Thông thường người ta sẽ biến đổi CSDL về dạng nhị phân để dễ tính toán.
+
 <a name="chC_II"></a>
-## II. Bài toán Association Rules với cơ sở dữ liệu store_data
-Trong repo này của mình có code minh họa bài toán tìm Association Rule sử dụng thuật toán A-priori trên môi trường PySpark với cơ sở dữ liệu [store_data.csv](https://drive.google.com/file/d/1y5DYn0dGoSbC22xowBq2d4po6h1JxcTQ/view?usp=sharing). Đây là link file [Jupyter Notebook](https://github.com/smoothkt4951/Massive-Data-Processing-Course/blob/main/A-priori/A_priori.ipynb) và link [Google Colab](https://colab.research.google.com/drive/1WTDOtKL3DR66tBmM_AtKvi_vtJWtCb--?usp=sharing) của mình, trong đó có giải thích rất rõ từng bước thực hiện và kết quả cùng với công dụng của từng hàm nên mình tránh trình bày dài dòng ở đây, mời bạn đọc ghé qua để xem mình code những gì trong đó nha.
+## II. Bài toán Association Rules với store datasets
+### 1. Quy trình khai thác luật kết hợp
+Giả sử độ phổ biến tối thiểu (minsupp) và độ tin cậy tối thiểu (minconf) do người dùng xác định.
+
+Cho tập các hạng mục I và CSDL giao dịch D. Bài toán khai thác luật kết hợp là bài toán tìm tất cả các luật dạng X -> Y ( với X, Y là tập con của I và X giao Y = {}) thỏa mãn độ phổ biến và độ tin cậy tối thiểu: supp(X -> Y) >= minsupp() và conf(X -> Y) >= minconf().
+
+Dưới đây là quy trình khai thác luật kết hợp cơ bản nhất:
+ - Bước 1: Tìm tất cả các tập phổ biến (theo ngưỡng minsupp).
+ - Bước 2: Xây dựng luật từ các tập phổ biến
+
+    + Đối với mỗi tập phổ biến S, tạo ra tất cả các tập con khác rỗng của S.
+    
+    + Đối với mỗi tập con khác rỗng A của S (|A| < |S|). Luật A -> (S - A) là luật kết hợp cần tìm nếu: conf (A -> (S - A)) = supp(S)/supp(A) >= minconf
+    
+Từ bài toán khai thác luật kết hợp chuyển thành bài toán khai thác tập phổ biến : độ phức tạp tính toán cao.
+
+### 2. Ứng dụng minh họa với strore datasets
+Trong repo này của mình có source code minh họa bài toán tìm Association Rule sử dụng thuật toán A-priori trên môi trường PySpark với cơ sở dữ liệu [store_data.csv](https://drive.google.com/file/d/1y5DYn0dGoSbC22xowBq2d4po6h1JxcTQ/view?usp=sharing). Đây là link file [Jupyter Notebook](https://github.com/smoothkt4951/Massive-Data-Processing-Course/blob/main/A-priori/A_priori.ipynb) và link [Google Colab](https://colab.research.google.com/drive/1WTDOtKL3DR66tBmM_AtKvi_vtJWtCb--?usp=sharing) của mình, trong đó có giải thích rất rõ từng bước thực hiện và kết quả cùng với công dụng của từng hàm nên mình tránh trình bày dài dòng ở đây, mời bạn đọc ghé qua để xem mình code những gì trong đó nha.
 <a name="chD"></a>
+## Tham khảo
+1. [online] Available at:  http://www.kdnuggets.com/2016/04/association-rules-apriori-algorithm-tutorial.html [Accessed 21 February 2021]
