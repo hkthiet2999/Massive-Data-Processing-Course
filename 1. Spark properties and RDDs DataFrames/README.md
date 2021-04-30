@@ -19,26 +19,26 @@
 
   Spark properties có nhiệm vụ kiểm soát hầu hết các cài đặt ứng dụng và được cấu hình riêng cho từng ứng dụng sử dụng Spark. Các thuộc tính này có thể được đặt trực tiếp trên SparkConf và được chuyển tới SparkContext. SparkConf cho phép người dùng định nghĩa cấu hình một số thuộc tính phổ biến (ví dụ: URL chính và appname - tên ứng dụng), cũng như các cặp key-values tùy ý thông qua phương thức set (). Lấy ví dụ đối với chương trình wordCount, chúng ta có thể khởi tạo một ứng dụng với đơn luồng như sau:
 
-![](1. Spark properties and RDDs DataFrames/images/vd1.png)
+![](images/vd1.png)
 
   Các properties chỉ định khoảng thời gian hay kích thước byte phải được cấu hình với một đơn vị thời gian hay đơn vị kích thước trong phạm vi cho phép sử dụng của Spark. Những định dạng về đơn vị kích thước và đơn vị thời gian sau được chấp nhận:
 
-![](1. Spark properties and RDDs DataFrames/images/donvi.png)
+![](images/donvi.png)
 <a name="chB_I_2"></a>
 ### 2. Tải động đối với các thuộc tính của Spark
   Trong một số trường hợp, bạn có thể muốn tránh mã hóa cứng các cấu hình nhất định trong SparkConf. Ví dụ: Nếu bạn muốn chạy cùng một ứng dụng với các bản chính khác nhau hoặc số lượng bộ nhớ khác nhau. Spark cho phép bạn chỉ cần tạo một conf trống như sau:
   
-  ![](1. Spark properties and RDDs DataFrames/images/emptyConf.png)
+  ![](images/emptyConf.png)
   
   Khi đó bạn vẫn có thể cung cấp các giá trị cấu hình trong quá trình runtime bằng cách setting trực tiếp trên command line:
   
-  ![](1. Spark properties and RDDs DataFrames/images/cmLine.png)
+  ![](images/cmLine.png)
   
    Spark shell và spark-submit tool hỗ trợ hai cách để tải cấu hình động. Đầu tiên là các tùy chọn dòng lệnh, chẳng hạn như --master, như hình trên. spark-submit có thể chấp nhận bất kỳ thuộc tính Spark nào sử dụng cờ --conf / -c, nhưng sử dụng cờ đặc biệt cho các thuộc tính đóng một vai trò trong việc khởi chạy ứng dụng Spark. Chạy ./bin/spark-submit --help sẽ hiển thị toàn bộ danh sách các tùy chọn này.
 
   Trong khi đó, bin / spark-submit cũng sẽ đọc các tùy chọn cấu hình từ conf / spark-defaults.conf, trong đó mỗi dòng bao gồm một khóa và một giá trị được phân tách bằng khoảng trắng. Ví dụ:
   
-  ![](1. Spark properties and RDDs DataFrames/images/example02.png)
+  ![](images/example02.png)
   
   Mọi giá trị được chỉ định dưới dạng flags hoặc properties file sẽ được chuyển đến ứng dụng và được hợp nhất với những giá trị được chỉ định thông qua SparkConf. Các thuộc tính được đặt trực tiếp trên SparkConf được ưu tiên cao nhất, sau đó các flags được chuyển đến spark-submit hoặc spark-shell, sau đó sẽ là các tùy chọn trong tệp spark-defaults.conf. Một vài khóa cấu hình đã được đổi tên kể từ các phiên bản Spark trước đó; tron trường hợp đó, các tên khóa cũ hơn vẫn được chấp nhận nhưng với sự ưu tiên thấp hơn bất kỳ trường hợp nào của khóa mới hơn.
 
@@ -100,20 +100,20 @@
   Spark 3.0.1 hoạt động với Python 2.7+ hoặc Python 3.4+. Nó có thể sử dụng trình thông dịch CPython tiêu chuẩn, vì vậy có thể sử dụng các thư viện C như NumPy. Nó cũng hoạt động với PyPy 2.3+.
   Các ứng dụng Spark trong Python có thể được chạy bằng tập lệnh bin / spark-submit bao gồm Spark khi chạy hoặc bằng cách đưa nó vào setup.py của bạn dưới dạng:
 
-![](1. Spark properties and RDDs DataFrames/images/installRequirement.png)
+![](images/installRequirement.png)
 
   Để chạy các ứng dụng Spark bằng Python mà không cần gõ câu lệnh pip cài đặt PySpark, hãy sử dụng tập lệnh bin/spark-submit nằm trong thư mục Spark. Tập lệnh này sẽ tải các thư viện Java/Scala của Spark và cho phép bạn gửi ứng dụng đến một cụm. Bạn cũng có thể sử dụng bin/pyspark để khởi chạy một trình bao Python tương tác.
 
   Nếu bạn muốn truy cập dữ liệu HDFS, bạn cần sử dụng một bản dựng của PySpark liên kết với phiên bản HDFS của bạn. Các gói dựng sẵn cũng có sẵn trên trang chủ Spark cho các phiên bản HDFS phổ biến. Cuối cùng, bạn cần nhập một số lớp Spark vào chương trình của mình bằng câu lệnh dưới đây:
  
-  ![](1. Spark properties and RDDs DataFrames/images/import.png)
+  ![](images/import.png)
   
 <a name="chB_II_3"></a>
 
 ### 3. Khởi tạo Spark
   Như đã trình bày ở chương I, điều đầu tiên mà chương trình Spark phải làm là tạo một đối tượng SparkContext, đối tượng này cho Spark biết cách truy cập một cụm. Để tạo SparkContext, trước tiên bạn cần xây dựng một đối tượng SparkConf chứa thông tin về ứng dụng của bạn:
   
-   ![](1. Spark properties and RDDs DataFrames/images/confDefault.png)
+   ![](images/confDefault.png)
    
    Tham số appName là tên để ứng dụng của bạn hiển thị trên giao diện người dùng cụm. Chính là URL cụm Spark, Mesos hoặc YARN hoặc một chuỗi “cục bộ” đặc biệt để chạy ở chế độ cục bộ. Trên thực tế, khi chạy trên một cụm, bạn sẽ không muốn hardcode master trong chương trình mà phải khởi chạy ứng dụng bằng spark-submit và nhận nó ở đó. Tuy nhiên, đối với thử nghiệm cục bộ và thử nghiệm đơn vị, bạn có thể vượt qua “cục bộ” để chạy Spark trong quá trình.
 
@@ -126,7 +126,7 @@
  
    Bộ sưu tập song song được tạo bằng cách gọi phương thức song song của SparkContext trên một bộ sưu tập hoặc bộ sưu tập có thể lặp lại hiện có trong chương trình trình điều khiển của bạn. Các phần tử của bộ sưu tập được sao chép để tạo thành một tập dữ liệu phân tán có thể hoạt động song song. Ví dụ: đây là cách tạo một tập hợp song song chứa các số từ 1 đến 5:
    
-![](1. Spark properties and RDDs DataFrames/images/distData.png)
+![](images/distData.png)
 
   Sau khi được tạo, tập dữ liệu phân tán (distData) có thể được vận hành song song. Ví dụ, chúng ta có thể gọi distData.reduce (lambda a, b: a + b) để thêm các phần tử của danh sách. Chúng tôi mô tả các hoạt động trên tập dữ liệu phân tán sau này.
 
@@ -137,7 +137,7 @@
 
   Các RDD của tệp văn bản có thể được tạo bằng cách sử dụng phương thức textFile của SparkContext. Phương thức này lấy một URI cho tệp (đường dẫn cục bộ trên máy hoặc URI hdfs: //, s3a: //, v.v.) và đọc nó như một tập hợp các dòng. Đây là một lời gọi ví dụ:
      
-![](1. Spark properties and RDDs DataFrames/images/distFile.png)
+![](images/distFile.png)
 
   Sau khi được tạo, distFile có thể được thực hiện bằng các hoạt động của tập dữ liệu. Ví dụ, chúng ta có thể cộng kích thước của tất cả các dòng bằng cách sử dụng bản đồ và các phép toán giảm như sau: distFile.map (lambda s: len (s)). Reduce (lambda a, b: a + b).
 
@@ -158,7 +158,7 @@
 
   Tương tự như các tệp văn bản, SequenceFiles có thể được lưu và tải bằng cách chỉ định đường dẫn. Các lớp khóa và giá trị có thể được chỉ định, nhưng đối với Writables tiêu chuẩn thì điều này không bắt buộc.
 
-![](1. Spark properties and RDDs DataFrames/images/rddHeader.png)
+![](images/rddHeader.png)
 
 #### 4.3 RDD Operations
   RDD hỗ trợ hai loại hoạt động: biến đổi, tạo ra một tập dữ liệu mới từ một tập dữ liệu hiện có và các hành động, trả về một giá trị cho chương trình trình điều khiển sau khi chạy một tính toán trên tập dữ liệu. Ví dụ, bản đồ là một phép biến đổi chuyển từng phần tử tập dữ liệu qua một hàm và trả về một RDD mới đại diện cho kết quả. Mặt khác, Reduce là một hành động tổng hợp tất cả các phần tử của RDD bằng cách sử dụng một số chức năng và trả về kết quả cuối cùng cho chương trình điều khiển (mặc dù cũng có một hàm ReduceByKey song song trả về một tập dữ liệu phân tán).
@@ -169,7 +169,7 @@
 
   Để minh họa những điều cơ bản về RDD, hãy xem xét chương trình đơn giản dưới đây:
   
-  ![](s1. Spark properties and RDDs DataFrames/images/basicRDD.png)
+  ![](images/basicRDD.png)
   
   Dòng đầu tiên xác định một RDD cơ sở từ một tệp bên ngoài. Tập dữ liệu này không được tải trong bộ nhớ hoặc không được hoạt động trên: các dòng chỉ là một con trỏ đến tệp. Dòng thứ hai xác định lineLengths là kết quả của việc chuyển đổi bản đồ. Một lần nữa, lineLengths không được tính toán ngay lập tức, do sự lười biếng. Cuối cùng, chúng tôi chạy giảm, đó là một hành động. Tại thời điểm này, Spark chia nhỏ tính toán thành các tác vụ để chạy trên các máy riêng biệt và mỗi máy chạy cả phần bản đồ và phần giảm cục bộ, chỉ trả lại câu trả lời cho chương trình điều khiển.
 Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD có chứa bất kỳ loại đối tượng nào, một vài hoạt động đặc biệt chỉ khả dụng trên RDD của các cặp khóa-giá trị. Các thao tác phổ biến nhất là các thao tác “xáo trộn” được phân phối, chẳng hạn như nhóm hoặc tổng hợp các phần tử bằng một khóa.
@@ -177,7 +177,7 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
   Trong Python, các hoạt động này hoạt động trên RDD có chứa các bộ giá trị Python được tích hợp sẵn như (1, 2). Đơn giản chỉ cần tạo các bộ giá trị như vậy và sau đó gọi hoạt động mong muốn của bạn.
 
   Ví dụ: đoạn mã sau sử dụng thao tác ReduceByKey trên các cặp khóa-giá trị để đếm số lần mỗi dòng văn bản xuất hiện trong một tệp:
-  ![](1. Spark properties and RDDs DataFrames/images/key-value-rdd.png)
+  ![](images/key-value-rdd.png)
   
   Chúng ta cũng có thể sử dụng counts.sortByKey () để sắp xếp các cặp theo thứ tự bảng chữ cái, và cuối cùng counts.collect () để đưa chúng trở lại chương trình điều khiển dưới dạng danh sách các đối tượng.
   
@@ -228,22 +228,22 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
   JSON là viết tắt của JavaScript Object Notation, là một loại tệp lưu trữ các đối tượng cấu trúc dữ liệu đơn giản ở định dạng .json. Nó chủ yếu được sử dụng để truyền dữ liệu giữa các máy chủ Web.
   Khi nói đến Spark, các tệp .json đang được tải không phải là tệp .json điển hình. Chúng ta không thể tải tệp JSON bình thường vào DataFrame. Tệp JSON mà chúng ta tải phải ở định dạng được cung cấp bên dưới:
   
-![](1. Spark properties and RDDs DataFrames/images/jsonFormat.png)
+![](images/jsonFormat.png)
 
   Các tệp JSON có thể được tải lên DataFrames bằng cách sử dụng hàm read.JSON, với tên tệp mà chúng tôi muốn tải lên. Ví dụ, chúng ta đang tải bảng đếm huy chương Olympic lên DataFrame. Tổng cộng có 10 trường. Hàm printSchema () in ra lược đồ của DataFrame như dưới đây:
   
-![](1. Spark properties and RDDs DataFrames/images/df_example.png)
+![](images/df_example.png)
 
 #### 4.2 Khởi tạo DataFrames từ RDDs đã tạo sẵn
   DataFrames cũng có thể được tạo từ các RDD hiện có. Đầu tiên, chúng ta tạo một RDD và sau đó tải RDD đó vào một DataFrame bằng cách sử dụng hàm createDataFrame (Name_of_the_rdd_file).
   Trong hình dưới đây, trước tiên chúng ta đang tạo một RDD, chứa các số từ 1 đến 10 và các hình khối của chúng. Sau đó, chúng tôi sẽ tải RDD đó vào DataFrame.
   
-![](1. Spark properties and RDDs DataFrames/images/df_byRDD.png)
+![](/images/df_byRDD.png)
 
 #### 4.3 Khởi tạo DataFrames từ tập tin CSV
   Chúng ta cũng có thể tạo DataFrames bằng cách tải các tệp .csv. Đây là một ví dụ về tải tệp .csv lên DataFrame:
   
-  ![](1. Spark properties and RDDs DataFrames/images/df_byCSV.png)
+  ![](images/df_byCSV.png)
 
 <a name="chB_III_5"></a>
 ### 5. Làm việc với DataFrames
