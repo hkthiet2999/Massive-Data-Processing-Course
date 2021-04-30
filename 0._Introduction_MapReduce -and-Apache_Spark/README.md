@@ -12,7 +12,7 @@
  ### 2. Các thành phần của Apache Spark
   Matei Zaharia là cha đẻ của Spark, ông này sử dụng Hadoop từ những ngày đầu phát triển spark. Đến năm 2009 ông viết Apache Spark để giải quyết những bài toán học máy ở đại học UC Berkely vì Hadoop MapReduce hoạt động không hiệu quả cho những bài toán này. Sau đó ông nhận ra rằng Spark không chỉ hữu ích cho học máy mà còn cho cả việc xử lý luồng dữ liệu hoàn chỉnh.
   
-   ![](0. Introduction MapReduce and Apache Spark/images/core.jpg)
+   ![](0._Introduction_MapReduce -and-Apache_Spark/images/core.jpg)
    
   Thành phần cơ bản của Spark là Spark Core: cung cấp những chức năng cơ bản nhất của Spark như lập lịch cho các tác vụ, quản lý bộ nhớ, fault recovery, tương tác với các hệ thống lưu trữ…Đặc biệt, Spark Core cung cấp API để định nghĩa RDD (Resilient Distributed DataSet) là tập hợp của các item được phân tán trên các node của cluster và có thể được xử lý song song.
   
@@ -108,7 +108,7 @@ Trong phần ví dụ minh họa này, mình đã tạo một Project (homework0
 
 Quá trình xử lý bài toán này bằng Map-Redue sử dụng thư viện Spark như sau:
 
-![](0. Introduction MapReduce and Apache Spark/images/wc.jpg)
+![](0._Introduction_MapReduce -and-Apache_Spark/images/wc.jpg)
 
 Đối với hàm Map:
   - Input là 1 đoạn văn bản
@@ -125,19 +125,19 @@ Giữa hàm Map và Reduce có một giai đoạn xử lý trung gian gọi là 
 
 Để hiện thực bài toán, bước đầu tiên cần phải import các thư viện cần thiết và khởi tạo project của spark như sau:
 
-![](0. Introduction MapReduce and Apache Spark/images/contructor.png)
+![](0._Introduction_MapReduce -and-Apache_Spark/images/contructor.png)
 
 Bước tiếp theo trong project này, mình tiến hành đọc file input và đồng thời split các khoảng trắng bị thừa. Sau đó mình xử lý bớt các ký tự đặc biệt và chuyển các ký tự in hoa thành in thường. Ví dụ như có trường hợp chữ 'KIENTHIET' và 'kienthiet' có trong file text, sau khi xử lý qua hàm lower_clean_str bên dưới, cả hai ký tự trên đều sẽ được tính là 1 ký tự.
 
-![](0. Introduction MapReduce and Apache Spark/images/read_clean_input.png)
+![](0._Introduction_MapReduce -and-Apache_Spark/images/read_clean_input.png)
 
 Đoạn code trên mình cũng thực hiện qua bước 'Map' như đã trình bày ở phần lý thuyết, chỉ cần gọi hàm map() có trong spark và truyền vào content của file text mình đã clean như trên.
 
 Sau khi thực hiện bước map, mình thực hiện tiếp bước reduce. Ở đây mình sử dụng hàm reduce() để tính tổng các ký tự đã map. Hàm reduce này ngoài chức năng tính tổng ký tự còn có thể tìm max, min các ký tự trong map. Còn hàm reduceByKey() dùng để đếm tần số xuất hiện các từ có trong map.
 
-![](0. Introduction MapReduce and Apache Spark/images/reduce.png)
+![](0._Introduction_MapReduce -and-Apache_Spark/images/reduce.png)
 
 Kết quả dưới đây thể hiện tần suất xuất hiện của 20 ký tự đầu tiên có trong file input.txt:
 
 
-![](0. Introduction MapReduce and Apache Spark/images/output.png)
+![](0._Introduction_MapReduce -and-Apache_Spark/images/output.png)
