@@ -1,6 +1,22 @@
-<a name="chB"></a>
+# Mục lục
+  - [I. Spark properties](#chB_I)
+    - [ 1. Tổng quan](#chB_I_1)
+    - [ 2. Tải động đối với các thuộc tính của Spark](#chB_I_2)
+    - [ 3. Tổng hợp và phân loại các thuộc tính trong Spark](#chB_I_3)
+  - [II. Spark RDD](#chB_II)
+     - [1. Tổng quan](#chB_II_1)
+     - [2. Cài đặt Spark](#chB_II_2)
+     - [3. Khởi tạo Spark](#chB_II_3)
+     - [4. Resilient Distributed Datasets (RDDs)](#chB_II_4)
+   - [III. Spark DataFrames](#chB_III)
+     - [1. Tổng quan](#chB_III_1)
+     - [2. Sử dụng DataFrames bổ sung cho RDD trong Spark](#chB_III_2)
+     - [3. Tính năng chính của DataFrames](#chB_III_3)
+     - [4. Khởi tạo DataFrames](#chB_III_4)
+     - [5. Làm việc với DataFrames](#chB_III_5)
 
-# B. Trình bày tổng quan về Spark Properties, Spark RDDs và Spark Dataframes
+
+# Tổng quan về Spark Properties, Spark RDDs và Spark Dataframes
 
 <a name="chB_I"></a>
 
@@ -326,3 +342,10 @@ Trong khi hầu hết các hoạt động của Spark hoạt động trên RDD c
 
   Còn rất nhiều hàm hữu ích trong Dataframes, tùy vào mục đích sử dụng mà ta gọi các hàm tương ứng. Để có thể tìm hiểu hơn về danh sách các hàm của Dataframes, các bạn có thể truy cập link sau: [DataFrames](https://spark.apache.org/docs/1.6.1/api/java/org/apache/spark/sql/DataFrame.html)
 
+## Tham khảo
+1. [online] Available at:  https://spark.apache.org/docs/latest/sql-programming-guide.html. [Accessed 25 January 2021]
+2. [online] Available at: https://intellipaat.com/blog/tutorial/spark-tutorial/spark-dataframe/. [Accessed 25 January 2021]
+3. [online] Available at:  https://spark.apache.org/docs/1.6.1/api/java/org/apache/spark/sql/DataFrame.html. [Accessed 29 January 2021]
+4. [online] Available at: https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html. [Accessed 29 January 2021]
+5. [online] Available at: https://spark.apache.org/docs/latest/rdd-programming-guide.html#rdd-persistence. [Accessed 29 January 2021]
+6. [online] Available at:  https://spark.apache.org/docs/latest/configuration.html#viewing-spark-properties [Accessed 29 January 2021]
