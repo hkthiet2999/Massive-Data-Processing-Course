@@ -1,19 +1,33 @@
-# D. Thuật toán Locality Sensitive Hashing trong bài toán Finding Similar Documents in Massive Data
- Mình may mắn được tiếp cận với một đề tài khá hay trong khóa học về Massive Data Processing, cụ thể trong đề tài này mình sẽ nghiên cứu về thuật toán Locality Sensitive Hashing (LSH) trong bài toán tìm kiếm các văn bản tương tự trong tập văn bản. Dưới đây là minh họa cho đề tài:   
+# Mục lục 
+  - [I. Tổng quan](#chD_I)
+    - [ 1. Bài toán tìm kiếm các văn bản tương tự trong tập văn bản lớn](#chD_I_1)
+    - [ 2. Jaccard Similarity](#chD_I_2)
+  - [II. Phương pháp Shingling](#chD_II)
+  - [III. Phương pháp Minhashing](#chD_III)
+  - [IV. Phương pháp Locality Sensitive Hashing](#chD_IV)
+     - [1. Phương pháp LSH trong tập tài liệu văn bản](#chD_IV_1)
+     - [2. Phương pháp LSH cho Minhash Signatures](#chD_IV_2)
+     - [3. Phân tích phương pháp LSH](#chD_IV_3)
+  - [V. Crawling data từ các đầu báo Việt Nam](#chD_V)
+  - [VI. Bài toán Finding Similar Documents](#chD_VI)
+
+# Thuật toán Locality Sensitive Hashing và bài toán Finding Similar Documents in Massive Data
+ Mình may mắn được tiếp cận với một đề tài rất hấp dẫn trong khóa học về Massive Data Processing, cụ thể trong đề tài này mình sẽ nghiên cứu về thuật toán Locality Sensitive Hashing (LSH) trong bài toán tìm kiếm các văn bản tương tự trong tập văn bản. Dưới đây là minh họa cho đề tài:   
  
- ![](LSH-for-Finding-Similar-Items/img/midterm_requirements.png)
+ ![](images/midterm_requirements.png)
  
  Dưới đây là phần mình tìm hiểu về thuật toán LSH và ứng dụng vào bài toán tìm các văn bản tương tự trong tập văn bản,phần này chiếm 3 điểm trong đề tài nên mình viết khá ngắn gọn để tiện trình bày trước lớp nhưng cũng rất đầy đủ và chi tiết, mời các bạn đọc qua.
  <a name="chD_I"></a>
  ## I. Tổng quan
  <a name="chD_I_1"></a>
-### 1. Bài toán tìm kiếm các văn bản tương tự trong tập văn bản
+### 1. Bài toán tìm kiếm các văn bản tương tự trong tập văn bản lớn
  Một trong những vấn đề cơ bản trong khai thác dữ liệu là khám phá dữ liệu để tìm các mục tương tự với nhau. Việc tìm kiếm các tài liệu, văn bản, hình ảnh, âm thanh (gọi chung là documents) tương tự nhau là một vấn đề dựa trên các tập hợp dữ liệu lớn và được thực hiện dựa trên phương pháp Shingling. Sau đó, các tập hợp dữ liệu lớn này có thể được nén lại dựa trên sự giống nhau của các tập hợp chính và có thể được phân biệt với các phiên bản nén của chúng, điều này sẽ được thực hiện thông qua phương pháp Min Hashing. Nếu chúng ta  muốn tránh so sánh tất cả các tài liệu với nhau và chỉ so sánh các tài liệu có xác suất cao sẽ trùng lắp thì chúng ta nên sử dụng phương pháp Locality-Sensitive Hashing (LSH). 
  Trong bài báo cáo này, chúng em sẽ trình bày phương pháp sử Locality Sensitive Hashing để tìm kiếm các văn bản tương tự trong tập văn bản. Phương pháp này sẽ lần lượt thực hiện qua ba bước. Bước đầu tiên là Shingling, đây là bước chuyển đổi tập dữ liệu văn bản và thiết lập đại diện mỗi văn bản một ID, sau đó đến bước Min Hashing chuyển đổi tập hợp dữ liệu lớn thành signatures trong khi vẫn giữ được tính chất đặc trưng ban đầu của tập dữ liệu này. Bước cuối cùng là sử dụng phương pháp Locality-Sensitive Hashing để tập trung so sánh các cặp signatures có thể trùng lắp nhau và cho ra kết quả với xác xuất cao nhất có thể.
   <a name="chD_I_2"></a>
  ### 2. Jaccard Similarity
   Để tiếp cận bài toán này, ta cần tập trung vào khái niệm về sự giống nhau giữa các văn bản trong tập dữ liệu văn bản. Các văn bản sẽ được biểu diễn bởi một mục trong tập dữ liệu văn bản lớn, sự giống nhau giữa các văn bản sẽ phụ thuộc vào giao điểm giữa các mục đó với nhau. Dựa vào đó, ta tìm kiếm các mục gần nhất với một mục mà ta đang xét. Để phân tích loại tương tự này, chúng em sẽ phân tích và khảo sát dựa trên Jaccard Similarity.
   Jaccard Similarity của hai tập hợp tương đương với tỷ lệ giá trị của giao điểm của các tập hợp với giá trị của liên hợp của chúng. Cụ thể, Jaccard của hai bộ T và S sẽ được hiển thị dưới dạng SIM (S, T) và được tính toán thông qua phương trình dưới đây:
+  
 		`SIM(S,T) = (|S ᴖ T|)/(|S ᴗ T|)`
 
  Khía cạnh tương tự giữa các văn bản mà chúng ta đang đề cập ở đây là sự tương đồng về mức độ của các ký tự trong một văn bản chứ không phải là sự giống nhau về ý nghĩa của các văn bản. Đó là lý do tại sao chúng ta nên xét tất cả các ký tự hiện có trong tài liệu. Tìm kiếm điểm tương đồng trong các văn bản có các ứng dụng khác nhau, một số ứng dụng bao gồm tìm kiếm các văn bản lặp lại, các văn bản tương tự nhau và phát hiện đạo văn.
@@ -54,7 +68,7 @@ Ví dụ minh họa bên dưới cho thấy một ma trận đặc trưng cho c�
  Điều đặc biệt ở đây là số cột trong ma trận signatures chỉ bằng “n”. Do đó, kích thước của ma trận signatures nhỏ hơn rất nhiều so với kích thước của ma trận đặc trưng. Hơn nữa, với mối quan hệ mà phương pháp minhash so với Jaccard Similarity đã đề cập ở trên, tính tương tự của các tài liệu sẽ được giữ nguyên ở một mức độ nào đó và sẽ không biến mất sau các phép biến đổi này. 
  Trên thực tế, không thể áp dụng hoán vị cho một ma trận đặc trưng lớn. Ngay cả việc chọn một hoán vị ngẫu nhiên từ một số lượng lớn các hàng và sắp xếp các dòng vào thứ tự dựa trên hoán vị cũng đã khá tốn thời gian. Giải pháp tối ưu nhất là ta áp dụng hoán vị cho ma trận bằng cách sử dụng các hàm băm. Thay vì chọn n hoán vị ngẫu nhiên từ các hàng, chúng ta chọn ngẫu nhiên n hàm băm của h1, h2,…, hn từ các hàng. Chúng ta coi SIG (i, c) là một phần tử của ma trận chữ ký cho hàm băm i và cột c. Đầu tiên, chúng ta đặt SIG (i, c) bằng vô cực cho tất cả các chữ “i” và “c”. Để tính toán ma trận signatures, ta duyệt lần lượt từng hàng của ma trận đặc trưng. Có thể minh họa thuật toán này bằng 5 bước trong mã giã dưới đây:
  
-![](LSH-for-Finding-Similar-Items/img/minhash_pscode.png)
+![](images/minhash_pscode.png)
  
   Từ thuật toán trên ta có thể tính toán ma trận minhash của ma trận đặc trưng trong Bảng 1. Đầu tiên, chúng ta cần chọn n hàm minhash. Đối với ví dụ trong Bảng 1, ta đặt n bằng 2 và chọn hai hàm băm là h1 (x) = x + 1 mod 5 và h2 (x) = 3x + 1 mod 5. Sau đó đánh số thứ tự các hàng từ 0 đến 4. Bảng 3 dưới đây là ma trận đặc trưng cùng với các giá trị được tính cho các hàm băm cho mỗi hàng:
   
@@ -81,16 +95,16 @@ Ví dụ minh họa bên dưới cho thấy một ma trận đặc trưng cho c�
 ### 4.2 Phương pháp LSH cho Minhash Signatures
  Nếu ta có một minhash signatures của các items trong tập dữ liệu, ta có thể áp dụng phương pháp LSH bằng cách chia ma trận signatures thành b dải sao cho mỗi dải bao gồm r hàng (n = br). Sau đó đối với mỗi dải ta sẽ chọn một hàm băm và hàm vectơ này sẽ cung cấp nhiều nhóm sử dụng r số nguyên cùng với một số lượng lớn các hàm băm cho chúng. Chúng ta có thể sử dụng cùng một hàm băm cho tất cả các dải, nhưng chúng ta sử dụng một mảng riêng để băm trong mỗi dải để các cột có vectơ tương tự không được kết nối với cùng một nhóm trong các dải khác nhau. Ví dụ bên dưới cho thấy các thành phần của ma trận signatures bao gồm 12 dòng được chia thành 4 dải và mỗi dải có 3 hàng:
 
-![](LSH-for-Finding-Similar-Items/img/band14.png)
+![](images/band14.png)
  
  Trong hình trên, cột thứ hai và thứ tư trong dải đầu tiên hiển thị vectơ [0, 2, 1] và chúng được kết nối với cùng một nhóm trong phép băm của dải đầu tiên. Do đó, bất kể thực tế là các cột này có giống nhau ở ba dải khác hay không, cặp cột này có thể được coi là một cặp ứng cử viên. Hơn nữa, hai cột không phù hợp trong dải đầu tiên có cơ hội trở thành một cặp ứng cử viên trong ba dải khác. Trên thực tế, có thể chúng giống nhau ở mỗi nhóm khác. Ở bất kỳ mức độ nào, hai cột cực kỳ giống nhau sẽ giống nhau nhất ở một số dải. Do đó, phương pháp này trực tiếp “match” các cột tương tự lại với nhau với xác suất cao hơn so với các cặp khác nhau.
 <a name="chD_IV_3"></a>
 ### 4.3 Phân tích phương pháp LSH
  Giả sử ta sử dụng b dải, mỗi dải chứa r hàng và giả sử một cặp tài liệu văn bản nào đó có Jaccard Similarity với giá trị là s. Ta biết rằng khả năng các minhash signatures cho các tài liệu văn bản này trong mỗi dòng nhất định của ma trận signatures phù hợp với nhau bằng s. Khả năng các tài liệu này (hoặc tốt nhất là signatures của chúng) là một cặp ứng cử viên có thể được tính toán như sau:
 
- ![](LSH-for-Finding-Similar-Items/img/text.png)
+ ![](images/text.png)
 
- ![](LSH-for-Finding-Similar-Items/img/cruve.png)
+ ![](images/cruve.png)
 
  Ta có một khái niện mới là “giới hạn ngưỡng” (threshold limit), là số lượng cặp văn bản tương tự trong s khi quá trình tăng dần của biểu đồ đạt đến giới hạn cao nhất. Số lượng giới hạn ngưỡng giúp ta xác định chất lượng của sự phát hiện tương đồng. Chất lượng của sự tương đồng này phụ thuộc vào hai giá trị false positive và false negative. Giới hạn ngưỡng này là một hàm số của b và r và giá trị được tính bằng xấp xỉ t = 〖1/b〗^(1/r) . Ví dụ: nếu b = 16 và r = 4, thì ngưỡng xấp xỉ tại s = 1/2 , vì căn mũ 4 của 1/16 là 1/2.
 
@@ -102,8 +116,8 @@ Như đã trình bày ở trên, khả năng hai cặp có Jaccard Similarity c�
  Do vấn đề crawling data từ các trang tin tức ở Việt Nam sẽ rất cần thiết cho các bạn học sinh, sinh viên đang nghiên cứu về lĩnh vực Big Data, ngoài ra cấu trúc website của các trang báo thay đổi liên tục đòi hỏi việc update source code mới có crawl dữ liệu nên mình tạo một repo [crawling-VietNam-News](https://github.com/smoothkt4951/crawling-VietNam-News) riêng chứa source và mô tả, mời các bạn ghé thăm, nếu thấy hữu ích hãy cho mình một star để ửng hộ mình nha <3.
  <a name="chD_VI"></a>
 ## VI. Bài toán Finding Similar Documents 
- Với scripts [crawling-data](https://github.com/smoothkt4951/crawling-VietNam-News) ở trên, bạn có thể crawl bao nhiêu dữ liệu tùy vào độ kiên trì, nhẫn nại của bạn. Để tiết kiệm thời gian, bạn có thể mở cùng lúc nhiều terminal để chạy script đó hoặc chạy song song trên google colab. Mình mới crawl sơ sơ được tầm 22k documents và mục tiêu là tận 100k documents lận, nhưng khi bỏ vào để test với project này thì chỉ dùng tầm 500 documents để tiết kiệm thời gian. Đây là link download dataset để test source code trong projects này: [test_dataset]( https://drive.google.com/file/d/17LrjoXqRtXsK9P9McO1iuXbX0usuRwY9/view?usp=sharing). 
+ Với scripts [crawling-data](https://github.com/smoothkt4951/crawling-VietNam-News) ở trên, bạn có thể crawl bao nhiêu dữ liệu tùy vào độ kiên trì, nhẫn nại của bạn. Để tiết kiệm thời gian, bạn có thể mở cùng lúc nhiều terminal để chạy script đó hoặc chạy song song trên google colab. Đây là link download dataset với khoảng 22k documents được crawl từ 3 đầu báo trên để test source code trong projects này: [test_dataset]( https://drive.google.com/file/d/17LrjoXqRtXsK9P9McO1iuXbX0usuRwY9/view?usp=sharing). 
  
  Sau khi đã crawl dữ liệu từ các trang báo, bạn có thể đưa vào một đoạn text trong một bài báo bất kỳ nào đó, chương trình sẽ trả về cho bạn một bài báo có contents tương tự với đoạn text của bạn. Mục đích của việc này là tránh sự trùng lắp, đạo văn giữa các bài báo với nhau, từ đó tổng hợp thành một trang báo tương tự trang baomoi.com tổng hợp tất cả các bài báo từ nhiều nguồn báo trong nước.
- 
- Đây là file ipynb chứa source code giải bài toán tìm kiếm văn bản tương tự trong tập văn bản lớn: [colab-not_using_pyspark_mini.ipynb](LSH-for-Finding-Similar-Items/main/colab-not_using_pyspark_mini.ipynb). Code này giải quyết bài toán theo 3 bước như đã trình bày trong phần lý thuyết, tuy nhiên để cải thiện tốc độ xử lý thì nhóm mình lập trình song song trên môi trường Pyspark, kết quả được lưu trong file [colab-not_using_pyspark_mini.ipynb](LSH-for-Finding-Similar-Items/main/colab-using_pyspark.ipynb). Trong các file ipynb này trình bày được các kết quả qua từng bước chạy thuật toán nên mình sẽ không trình bày dài dòng ở đây, mời bạn đọc xem qua thành quả của nhóm mình nha.
+
+ Đây là file ipynb chứa source code giải bài toán tìm kiếm văn bản tương tự trong tập văn bản lớn: [colab-not_using_pyspark_mini.ipynb](https://github.com/smoothkt4951/Massive-Data-Processing-Course/blob/main/3.%20Locality-Sensitive%20Hashing/Finding%20Similar%20Items/main/colab-not_using_pyspark_mini.ipynb). Code này giải quyết bài toán theo 3 bước như đã trình bày trong phần lý thuyết, tuy nhiên để cải thiện tốc độ xử lý thì nhóm mình lập trình song song trên môi trường Pyspark, kết quả được lưu trong file [colab-not_using_pyspark_mini.ipynb](https://github.com/smoothkt4951/Massive-Data-Processing-Course/blob/main/3.%20Locality-Sensitive%20Hashing/Finding%20Similar%20Items/main/colab-using_pyspark.ipynb). Trong các file ipynb này trình bày được các kết quả qua từng bước chạy thuật toán nên mình sẽ không trình bày dài dòng ở đây, mời bạn đọc xem qua thành quả của nhóm mình nha.
