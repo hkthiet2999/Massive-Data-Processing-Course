@@ -27,9 +27,9 @@
   - III. Ví dụ minh họa
 - [1. Spark Properties, Spark RDDs và Spark Dataframes](https://github.com/smoothkt4951/Massive-Data-Processing-Course/tree/main/1.%20Spark%20properties%20and%20RDDs%20DataFrames)
   - I. Spark properties
-    - 1. Tổng quan
-    - 2. Tải động đối với các thuộc tính của Spark
-    - 3. Tổng hợp và phân loại các thuộc tính trong Spark
+     - 1. Tổng quan
+     - 2. Tải động đối với các thuộc tính của Spark
+     - 3. Tổng hợp và phân loại các thuộc tính trong Spark
   - II. Spark RDD
      - 1. Tổng quan
      - 2. Cài đặt Spark
@@ -49,8 +49,8 @@
      - 2. Ứng dụng minh họa với store datasets
 - [3. Locality Sensitive Hashing và bài toán Finding Similar Documents với dữ liện lớn](https://github.com/smoothkt4951/Massive-Data-Processing-Course/tree/main/3.%20Locality-Sensitive%20Hashing)
   - I. Tổng quan
-    - 1. Bài toán tìm kiếm các văn bản tương tự trong tập văn bản
-    - 2. Jaccard Similarity
+     - 1. Bài toán tìm kiếm các văn bản tương tự trong tập văn bản
+     - 2. Jaccard Similarity
   - II. Phương pháp Shingling
   - III. Phương pháp Minhashing
   - IV. Phương pháp Locality Sensitive Hashing
@@ -60,5 +60,12 @@
   - V. Crawling data từ các đầu báo Việt Nam
   - VI. Bài toán Finding Similar Documents
 - [4. Machine Learning trên môi trường PySpark ](https://github.com/smoothkt4951/Massive-Data-Processing-Course/tree/main/4.%20Machine%20Learning%20in%20PySpark)
+  - I. Tổng quan
+     - 1. Các khái niệm cơ bản
+     - 2. PySpark MLlib
+     - 3. Machine Learning với thư viện sklearn so với PySpark Mllib
+  - II. Bài toán Hồi quy Logistic trên bank datasets
+     - 1. Không sử dụng PySpark MLlib
+     - 2. Sử dụng PySpark MLlib
 - [5. Recommender Systems](https://github.com/smoothkt4951/Massive-Data-Processing-Course/tree/main/5.%20Recommender%20Systems)
 
