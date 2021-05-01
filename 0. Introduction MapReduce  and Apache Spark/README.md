@@ -1,7 +1,22 @@
-<a name="chA"></a>
-# A.Trình bày tổng quan về Apache Spark và Mapreduce
+# Mục lục
+- [I. Tổng quan về Apache Spark](#I.-tong-quan-ve-apache-spark)
+  - [ 1. Giới thiệu](#1.-gioi-thieu)
+  - [ 2. Các thành phần của Apache Spark](#2.-cac-thanh-phan-cua-apache-spark)
+  - [ 3. Những tính năng nổi bật](#3.-nhung-tinh-nang-noi-bat)
+  - [ 4. Quản lý bộ nhớ của Apache Spark](#4.-quan-ly-bo-nho-cua-apache-spark)
+- [II. Tổng quan về Mapreduce](#II.-tong-quan-ve-mapreduce)
+  - [ 1. Hadoop và Mapreduce](#1.-hadoop-mapreduce)
+  - [ 2. Mapreduce và các thủ tục chính](#2.-mapreduce-va-cac-thu-tuc-chinh)
+  - [ 3. Hàm Map và Reduce](#3.-ham-map-va-mapreduce)
+  - [ 4. Nguyên tắc hoạt động ](#4.-nguyen-tac-hoat-dong)
+  - [ 5. Các bước hoạt động của MapReduce](#5.-cac-buoc-hoat-dong)
+  - [ 6. Luồng dữ liệu nền tảng của Mapreduce](#6.-luong-du-lieu)
+  - [ 7. Ứng dụng của Mapreduce](#7.-ung-dung)
+- [III. Ví dụ minh họa](#vd)
+
+# Tổng quan về Apache Spark và Mapreduce
 <a name="I.-tong-quan-ve-apache-spark"></a>
-## I. Tổng quan về Apache Spark
+## I. Apache Spark
 <a name="1.-gioi-thieu"></a>
 ### 1. Giới thiệu
   Apache Spark là một open source cluster computing framework được phát triển vào năm 2009 bởi AMPLab tại đại học California. Sau này, Spark đã được truyền lại cho Apache Software Foundation vào năm 2013 và được phát triển cho đến nay.
@@ -51,9 +66,9 @@ Quá trình Spark xây dựng DAG: Có hai kiểu chuyển đổi có thể áp 
   Spark truy cập dữ liệu được lưu trữ ở các nguồn khác nhau như: HDFS, Local Disk, RAM. Cache Manager sử dụng Block Manager để quản lý dữ liệu. Cache Manager quản lý dữ liệu nào được Cache trên RAM, thông thường là dữ liệu được sử dụng thường xuyên nhất, nó cũng có thể được xác định thủ công bằng tay sử dụng phương thức persit hoặc cache. Nếu kích thước RAM không đủ chứa dữ liệu thì dữ liệu sẽ được lưu trữ sang Tachyon và cuối cùng là lưu trữ lên đĩa. Khi dữ liệu(RDD) không được lưu trữ trên RAM, khi có nhu cầu sử dụng đến, chúng sẽ được recompute lại. Nó sử dụng một khái niệm là “storage level” để quản lý cấp độ của lưu trữ của dữ liệu.
   
 <a name="II.-tong-quan-ve-mapreduce"></a>
-## II. Tổng quan về Mapreduce
+## II. MapReduce
 <a name="1.-hadoop-mapreduce"></a>
-### 1. Hadoop và Mapreduce
+### 1. Hadoop và MapReduce
   Hadoop là một framework giúp lưu trữ và xử lý Big Data áp dụng MapReduce. Nói đơn giản cách khác nó sẽ giúp sắp xếp dữ liệu sao cho user có thể dễ dàng sử dụng nhất.
 
   MapReduce được Google tạo ra ban đầu để xử lý đống dữ liệu lớn của công ty họ. Ta còn có thể gọi phương pháp này là Phân tán dữ liệu vì nó tách hết tập hợp các dữ liệu ban đầu thành các dữ liệu nhỏ và sắp xếp lại chúng để dễ dàng tìm kiếm và truy xuất hơn, đặc biệt là việc truy xuất các dữ liệu tương đồng. Ví dụ thường thấy nhất là các đề xuất mà ta hay thấy ở Google tìm kiếm
@@ -89,7 +104,7 @@ Tiến hành tổng hợp những kết quả thu được để đề ra đư�
 - Bước 4: Tiến hành thực thi tiếp mã Reduce() để có thể xử lý tiếp các dữ liệu cần thiết.  
 - Bước 5: Thực hiện tạo các dữ liệu xuất ra cuối cùng. 
 <a name="6.-luong-du-lieu"></a>
-### 6. Luồng dữ liệu nền tảng của Mapreduce
+### 6. Luồng dữ liệu nền tảng của MapReduce
 - Input Reader
 - Map Function
 - Partition Function
@@ -106,8 +121,8 @@ MapReduce được ứng dụng cho việc thống kê hàng loạt những số
 - Thống kê được các lượt truy cập của khách hàng sao cho nó có thể tương ứng với các URLs.
 - Thống kê được tất cả từ khóa có trên website, hostname,…
 <a name="vd"></a>
-## Ví dụ minh họa
-Trong phần ví dụ minh họa này, mình đã tạo một Project (homework01) trên Google Colab dùng thư viện Spark đọc vào một file văn bản (input.txt) và đếm số từ trên file văn bản, sau đó lọc ra k từ có tần suất xuất hiện nhiều nhất. Đây là đường link đến project của mình : [homework01](https://colab.research.google.com/drive/1ooNYc_wXl-0V3JwhQ8F62oXW6ab-986v#scrollTo=Ny0esGJZpT4o)
+## III. Ví dụ minh họa
+Trong phần ví dụ minh họa này, mình sẽ tạo một Project (homework01) trên Google Colab dùng thư viện Spark đọc vào một file văn bản (input.txt) và đếm số từ trên file văn bản, sau đó lọc ra k từ có tần suất xuất hiện nhiều nhất. Đây là đường link đến project của mình : [homework01](https://colab.research.google.com/drive/1ooNYc_wXl-0V3JwhQ8F62oXW6ab-986v#scrollTo=Ny0esGJZpT4o)
 
 Quá trình xử lý bài toán này bằng Map-Redue sử dụng thư viện Spark như sau:
 
@@ -144,3 +159,7 @@ Kết quả dưới đây thể hiện tần suất xuất hiện của 20 ký t
 
 ![](images/output.png)
 
+## Tham khảo
+1. [online] Available at: https://viblo.asia/p/tong-quan-ve-apache-spark-cho-he-thong-big-data-RQqKLxR6K7z
+2. [online] Available at: https://viblo.asia/p/tim-hieu-ve-hadoop-bJzKmOBXl9N
+3. [online] Available at: https://sparkbyexamples.com/apache-spark-rdd/spark-reducebykey-usage-with-examples/
