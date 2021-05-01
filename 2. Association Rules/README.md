@@ -1,6 +1,6 @@
 # Mục lục
   - [I. Tổng quan](#chC_I)
-      -[1. Các khái niệm cơ bản](#chC_I_1)
+      - [1. Các khái niệm cơ bản](#chC_I_1)
   - [II. Bài toán Association Rules với store datasets](#chC_II)
       - [1. Quy trình khai thác luật kết hợp](#chC_II_1)
       - [2. Ứng dụng minh họa với strore datasets](#chC_II_2)
