@@ -1,1 +1,26 @@
-# coming soon
+# Mục lục
+  - [I. Tổng quan về Recommendation Systems](#chI)
+      - [1. Mục tiêu và mô hình hóa](#chI_1)
+      - [2. Cấu trúc chung của Recommendation Systems](#chI_2)
+      - [3. Utility Matrix và cách áp dụng](#chI_3)
+           - [3.1 Định nghĩa Utility Matrix](#chI_3_1)
+           - [3.2 Áp dụng Utility Matrix trong Hệ thống khuyến nghị](#chI_3_2)
+      - [4. Ứng dụng của Recommendation Systems](#chI_4)
+ 
+  - [II. Hệ thống khuyến nghị sách](#chII)
+      - [1. Datasets](#chII_1)
+      - [2. Giải thuật và mô hình giải quyết bài toán](#chII_2)
+           - [2.1 Phương pháp Collaborative Filtering](#chII_2_1)
+                - [2.1.1 Measuring Similarity](#chII_2_1_1)
+                - [2.1.2 Tính hai mặt của Similarity](#chII_2_1_2)
+                - [2.1.3 Clustering Users and Items](#chII_2_1_3)
+           - [2.2 Neighborhood-Based Collaborative Filtering](#chII_2_2)
+                - [2.2.1 User-user Collaborative Filtering](#chII_2_2_1)
+                     - [2.2.1.1 Similarity functions](#chII_2_2_1_1)
+                     - [2.2.2.2 Rating prediction](#chII_2_2_2_2)
+                - [2.2.2. Item-item Collaborative Filtering](#chII_2_2_2)
+           - [2.3 Alternating Least Square trong Recommendation Systems](#chII_2_3)
+                - [2.3.1 Alternating Least Square (ALS)](#chII_2_3_1)
+                - [2.3.2 Matrix Factorization: Mục tiêu và thuật toán ALS trên Single Machine](#chII_2_3_2)
+                - [2.3.3 PySpark Collaborative Filtering với thuật toán ALS](#chII_2_3_3)
+          
